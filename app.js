@@ -4,6 +4,8 @@ const morgan = require("morgan");
 const cors = require("cors");
 const routerNavigation = require("./src/routesNavigation");
 
+require("dotenv").config();
+
 const app = express();
 app.use(cors());
 app.use(morgan("dev"));
@@ -18,5 +20,5 @@ app.get("*", (request, response) => {
 });
 
 app.listen(process.env.port, () => {
-  console.log(`Listening on Port  ${process.env.port}`);
+  console.log(`Listening on Port ${process.env.port}`);
 });
