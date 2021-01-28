@@ -31,16 +31,16 @@ module.exports = {
           console.log(checkPassword)
           if (checkPassword) {
             const {
-              userId,
+              userId ,
               fullName,
               email,
               role
             } = checkDataUser[0]
             const paylot = {
-              userId,
+              userId ,
               fullName,
               email,
-              role
+             role
             }
             const token = jwt.sign(paylot, 'KERJAIN', { expiresIn: '10h' })
             const result = { ...paylot, token }
@@ -71,7 +71,7 @@ module.exports = {
         fullName,
         email,
         phoneNumber,
-        role: 0,
+       role: 0,
         password: encryptPassword
       }
       const checkDataUser = await login(email)
@@ -128,30 +128,30 @@ module.exports = {
     }
   },
   forgotPassword: async (request, response) => {
-    try {
-      const { email } = request.body
-      const checkDataUser = await login(email)
-      const keys = Math.round(Math.random() * 10000)
-      if (checkDataUser.length >= 1) {
-        const setData = {
-          user_key: keys,
-          user_updated_at: new Date()
-        }
-        await settings(setData, checkDataUser[0].userId)
-        const transporter = nodemailer.createTransport({
-          host: 'smtp.gmail.com',
-          port: 587,
-          secure: false, // true for 465, false for other ports
-          auth: {
-            user: 'kostkost169@gmail.com', // generated ethereal user
-            pass: 'admin@123456' // generated ethereal password
+      try{
+        const { email } = request.body
+        const checkDataUser = await login(email)
+        const keys = Math.round(Math.random() * 10000)
+        if (checkDataUser.length >= 1) {
+          const setData = {
+            user_key: keys,
+            user_updated_at: new Date()
           }
-        })
-        const mailOptions = {
-          from: '"Terbangin " <terbangin@gmail.com', // sender address
-          to: email, // list of receivers
-          subject: 'terbangin.com - Forgot Password', // Subject line
-          html: `<p>To Account   ${email}</p>
+          await settings(setData, checkDataUser[0].userId )
+          const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+              user: 'kostkost169@gmail.com', // generated ethereal user
+              pass: 'admin@123456' // generated ethereal password
+            }
+          })
+          const mailOptions = {
+            from: '"Terbangin " <terbangin@gmail.com', // sender address
+            to: email, // list of receivers
+            subject: 'terbangin.com - Forgot Password', // Subject line
+            html: `<p>To Account   ${email}</p>
             <p>Hello I am milla personal team from terbangin.com will help you to change your new password, please activate it on this page</p>
             <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
         }
