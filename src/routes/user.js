@@ -7,7 +7,7 @@ const {
   resetPassword,
   settings
 } = require('../controller/user')
-
+// const {authUser ,authrole1} = require('../middleware/auth')
 // ==> Auth  <== //
 router.post('/login', login)
 router.post('/register', register)
