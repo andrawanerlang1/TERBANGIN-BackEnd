@@ -1,4 +1,5 @@
 const connection = require('../config/mysql')
+const fs = require('fs')
 
 module.exports = {
   postFlightModel: (setData) => {
@@ -19,7 +20,7 @@ module.exports = {
   getTotalCapacity: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT capacity FROM flight WHERE flightId = ${id}`,
+        `SELECT capacity, mascapaiImage FROM flight WHERE flightId = ${id}`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }

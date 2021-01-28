@@ -1,4 +1,5 @@
 const helper = require('../helper/response')
+// const fs = require('fs')
 const {
   postFlightModel,
   updateCapacityModel,
@@ -75,20 +76,28 @@ module.exports = {
       const setData = {
         capacity: cap[0].capacity - a
       }
-      if (setData.capacity < 0) {
+      if (totalPassenger > 10) {
         return helper.response(
           res,
           400,
-          'Sorry! This airlines id full of capacity'
+          'Booking cannot be processed, you can only book for a maximum of 10 passengers'
         )
       } else {
-        const result = await updateCapacityModel(setData, flightId)
-        console.log(result)
-        return helper.response(
-          res,
-          200,
-          'Success book your flight, thank you !'
-        )
+        if (setData.capacity < 0) {
+          return helper.response(
+            res,
+            400,
+            'Sorry! This airlines id full of capacity'
+          )
+        } else {
+          const result = await updateCapacityModel(setData, flightId)
+          console.log(result)
+          return helper.response(
+            res,
+            200,
+            'Success book your flight, thank you !'
+          )
+        }
       }
     } catch (error) {
       console.log(error)

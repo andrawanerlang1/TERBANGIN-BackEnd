@@ -20,7 +20,7 @@ app.get('*', (request, response) => {
 })
 
 
-app.listen(3000, () => {
-  console.log("Express app is listening on port 3000");
-});
+app.listen(process.env.port, () => {
+  console.log(`Listening on Port ${process.env.port}`)
+})
 
