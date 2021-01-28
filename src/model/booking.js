@@ -51,6 +51,17 @@ module.exports = {
       })
     })
   },
+  getDataByBookingId: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(`SELECT * FROM booking WHERE bookingId=${id}`, (error, result) => {
+        if (!error) {
+          resolve(result)
+        } else {
+          reject(error)
+        }
+      })
+    })
+  },
   getDataBookingByUserId: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(`SELECT * FROM booking WHERE userId=${id}`, (error, result) => {

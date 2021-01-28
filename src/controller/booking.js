@@ -1,7 +1,9 @@
 const {
   postBooking,
   postDataPassenger,
-  getDataBookingByUserId
+  getDataByBookingId,
+  getDataBookingByUserId,
+  patchStatusBooking
 } = require('../model/booking')
 // patchStatusBooking,
 // getBookingDetail
@@ -53,7 +55,7 @@ module.exports = {
           await postDataPassenger(setDataPassenger)
         }
       }
-      return helper.response(res, 200, 'Success booking! Enjoy your trip', result)
+      return helper.response(res, 200, 'Success booking! Enjoy your trip!', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request!', error)
     }
@@ -65,9 +67,35 @@ module.exports = {
       if (result.length > 0) {
         return helper.response(res, 200, `Success get data booking by id user ${id}`, result)
       } else {
-        return helper.response(res, 404, 'You haven\'t booking any ticket!')
+        return helper.response(res, 404, 'You haven\'t booked any ticket!')
       }
     } catch (error) {
+      return helper.response(res, 400, 'Bad Request!', error)
+    }
+  },
+  patchStatusBooking: async (req, res) => {
+    try {
+      let { userId, id } = req.query
+      userId = parseInt(userId)
+      id = parseInt(id)
+      const checkUserId = await getDataBookingByUserId(userId)
+      const checkBookingId = await getDataByBookingId(id)
+      if (checkUserId.length > 0) {
+        if (checkBookingId.length > 0) {
+          const setData = {
+            paymentStatus: 1,
+            updatedAt: new Date()
+          }
+          const resultPatch = await patchStatusBooking(setData, id)
+          return helper.response(res, 200, 'Booking Succeeded!', resultPatch)
+        } else {
+          return helper.response(res, 404, `There is no data booking id: ${id} for user id: ${userId}!`)
+        }
+      } else {
+        return helper.response(res, 404, 'You haven\'t booked any ticket!')
+      }
+    } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Bad Request!', error)
     }
   }
