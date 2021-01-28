@@ -15,5 +15,34 @@ module.exports = {
         }
       })
     })
+  },
+  getTotalCapacity: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT capacity FROM flight WHERE flightId = ${id}`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  updateCapacityModel: (setData, flightId) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'UPDATE flight SET ? WHERE flightId = ?',
+        [setData, flightId],
+        (error, result) => {
+          if (!error) {
+            const newResult = {
+              flightId: flightId,
+              ...setData
+            }
+            resolve(newResult)
+          } else {
+            reject(new Error(error))
+          }
+        }
+      )
+    })
   }
 }
