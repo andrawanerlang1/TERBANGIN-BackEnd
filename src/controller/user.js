@@ -182,20 +182,20 @@ module.exports = {
     try {
       const { id } = request.params
       const {
-        user_name,
-        user_email,
-        user_numberPhone,
-        user_city,
-        user_nationality,
-        post_code
+        fullName,
+        email,
+        phoneNumber,
+        city,
+        nationality,
+        postCode
       } = request.body
       const setData = {
-        user_name,
-        user_email,
-        user_numberPhone,
-        user_city,
-        user_nationality,
-        post_code
+        fullName,
+        email,
+        phoneNumber,
+        city,
+        nationality,
+        postCode
       }
       const checkkUser = await getuserbyId(id)
       if (checkkUser.length > 0) {

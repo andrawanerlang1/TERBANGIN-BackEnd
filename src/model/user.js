@@ -60,12 +60,12 @@ module.exports = {
   settings: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'UPDATE user SET ? WHERE user_id = ?',
+        'UPDATE user SET ? WHERE userId  = ?',
         [setData, id],
         (error, result) => {
           if (!error) {
             const newResult = {
-              user_id: id,
+              userId : id,
               ...setData
             }
             resolve(newResult)
