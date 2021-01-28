@@ -127,7 +127,8 @@ module.exports = {
         departureTime,
         arrivedTime,
         mascapai,
-        price,
+        priceMin,
+        priceMax,
         sort
       } = req.query
 
@@ -151,7 +152,6 @@ module.exports = {
       const arrived =
         arrivedTime !== '' ? ` AND arrivedTime = ${arrivedTime}` : ''
       const airline = mascapai !== '' ? ` AND mascapai = ${mascapai}` : ''
-      const prices = price !== '' ? `AND price = ${price}` : ''
 
       const result = await getFlightModel(
         fromCity,
@@ -165,7 +165,8 @@ module.exports = {
         departure,
         arrived,
         airline,
-        prices,
+        priceMin,
+        priceMax,
         sort
       )
       return helper.response(res, 200, 'Success get flight !', result)
