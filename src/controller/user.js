@@ -171,7 +171,13 @@ module.exports = {
           return helper.response(response,'Bad Request',error)
       }
   },
-  resetPassword: async (request, response) => {},
+  resetPassword: async (request, response) => {
+      try{
+        console.log(request.body)
+      }catch(error){
+          return helper.response(response,400, 'Bad Request')
+      }
+  },
   settings: async (request, response) => {
     try {
       const { id } = request.params
