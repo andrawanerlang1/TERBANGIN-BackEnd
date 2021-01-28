@@ -10,7 +10,7 @@ module.exports = {
         arrivedTime,
         price,
         capacity,
-        class,
+        clas,
         fromCity,
         fromCountry,
         toCity,
@@ -18,7 +18,8 @@ module.exports = {
         tripType,
         terminal,
         transitType,
-      };
+      } = req.body
+      if (mascapai && facilities && departureTime && arrivedTime && price && capacity && clas && fromCity && toCity && fromCountry && toCountry && tripType && terminal &&transitType)
     } catch (error) {}
   },
 };

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 28 Jan 2021 pada 00.36
+-- Waktu pembuatan: 28 Jan 2021 pada 01.14
 -- Versi server: 10.4.14-MariaDB
 -- Versi PHP: 7.4.11
 
@@ -71,7 +71,7 @@ CREATE TABLE `flight` (
   `arrivedTime` datetime NOT NULL DEFAULT current_timestamp(),
   `price` int(10) NOT NULL,
   `capacity` int(4) NOT NULL,
-  `class` int(2) NOT NULL,
+  `clas` int(2) NOT NULL,
   `fromCity` varchar(30) NOT NULL,
   `fromCountry` varchar(30) NOT NULL,
   `toCity` varchar(30) NOT NULL,
