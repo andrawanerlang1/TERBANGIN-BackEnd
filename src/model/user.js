@@ -65,7 +65,7 @@ module.exports = {
         (error, result) => {
           if (!error) {
             const newResult = {
-              userId : id,
+              userId: id,
               ...setData
             }
             resolve(newResult)
