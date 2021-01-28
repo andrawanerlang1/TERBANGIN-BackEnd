@@ -11,10 +11,13 @@ module.exports = {
     try {
       const {
         mascapai,
-        facilities,
         departureTime,
         arrivedTime,
+        flightDate,
         price,
+        food,
+        wifi,
+        luggage,
         capacity,
         clas,
         fromCity,
@@ -27,7 +30,7 @@ module.exports = {
       } = req.body
       if (
         mascapai &&
-        facilities &&
+        flightDate &&
         departureTime &&
         arrivedTime &&
         price &&
@@ -44,10 +47,13 @@ module.exports = {
         const setData = {
           mascapai,
           mascapaiImage: req.file === undefined ? '' : req.file.filename,
-          facilities,
+          flightDate,
           departureTime,
           arrivedTime,
           price,
+          food,
+          wifi,
+          luggage,
           capacity,
           clas,
           fromCity,
@@ -61,7 +67,7 @@ module.exports = {
         const result = await postFlightModel(setData)
         return helper.response(res, 200, 'Success add new flight', result)
       } else {
-        return helper.response(res, 400, 'All data must be filled in')
+        return helper.response(res, 400, 'Please fill out the form correctly')
       }
     } catch (error) {
       console.log(error)

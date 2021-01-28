@@ -1,10 +1,10 @@
 const connection = require('../config/mysql')
-const fs = require('fs')
+// const fs = require('fs')
 
 module.exports = {
   postFlightModel: (setData) => {
     return new Promise((resolve, reject) => {
-      connection.query(`INSERT INTO flight SET ?`, setData, (error, result) => {
+      connection.query('INSERT INTO flight SET ?', setData, (error, result) => {
         if (!error) {
           const newResult = {
             flightId: result.insertId,
