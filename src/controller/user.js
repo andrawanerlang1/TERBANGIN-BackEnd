@@ -8,6 +8,7 @@ const {
 const helper = require('../helper/response')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
 
 module.exports = {
   login: async (request, response) => {
@@ -126,7 +127,50 @@ module.exports = {
       return helper.response(response, 400, 'Bad Request', error)
     }
   },
-  forgotPassword: async (request, response) => {},
+  forgotPassword: async (request, response) => {
+      try{
+        const { user_email } = request.body
+        const checkDataUser = await login(user_email)
+        const keys = Math.round(Math.random() * 10000)
+        if (checkDataUser.length >= 1) {
+          const setData = {
+            user_key: keys,
+            user_updated_at: new Date()
+          }
+          await settings(setData, checkDataUser[0].user_id)
+          const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+              user: 'kostkost169@gmail.com', // generated ethereal user
+              pass: 'admin@123456' // generated ethereal password
+            }
+          })
+          const mailOptions = {
+            from: '"Terbangin " <terbangin@gmail.com', // sender address
+            to: user_email, // list of receivers
+            subject: 'terbangin.com - Forgot Password', // Subject line
+            html: `<p>To Account   ${user_email}</p>
+            <p>Hello I am milla personal team from terbangin.com will help you to change your new password, please activate it on this page</p>
+            <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
+          }
+          await transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+              console.log(error)
+              return helper.response(response, 400, 'Email not send !')
+            } else {
+              console.log(info)
+              return helper.response(response, 200, 'Email has been send !')
+            }
+          })
+        } else {
+          return helper.response(response, 400, 'Email / Account not Registed !')
+        }
+      }catch(error){
+          return helper.response(response,'Bad Request',error)
+      }
+  },
   resetPassword: async (request, response) => {},
   settings: async (request, response) => {
     try {
