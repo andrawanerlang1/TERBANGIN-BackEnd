@@ -3,7 +3,8 @@ const helper = require('../helper/response')
 const {
   postFlightModel,
   updateCapacityModel,
-  getTotalCapacity
+  getTotalCapacity,
+  getFlightModel
 } = require('../model/flight')
 
 module.exports = {
@@ -107,6 +108,68 @@ module.exports = {
       }
     } catch (error) {
       console.log(error)
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  getFlight: async (req, res) => {
+    try {
+      const {
+        fromCity,
+        toCity,
+        flightDate,
+        clas,
+        transitDirect,
+        transit1,
+        transit2,
+        food,
+        wifi,
+        luggage,
+        departureTime,
+        arrivedTime,
+        mascapai,
+        price,
+        sort
+      } = req.query
+
+      const transitDir = transitDirect !== 0 ? ' transitType = 0' : ''
+      const transit1x = transit1 !== 0 ? ' transitType = 1' : ''
+      const transit2x = transit2 !== 0 ? ' transitType = 2' : ''
+      const transit =
+        transitDir === '' && transit1x === '' && transit2x === ''
+          ? ''
+          : transitDir === '' && transit1x === ''
+          ? ` AND (${transit2x})`
+          : transitDir === ''
+          ? ` AND (${transit1x} OR${transit2x})`
+          : ` AND (${transitDir} OR${transit1x} OR${transit2x})`
+
+      const facLuggage = luggage !== '' ? ` AND luggage = ${luggage}` : ''
+      const facfood = food !== '' ? ` AND food = ${food}` : ''
+      const facwifi = wifi !== '' ? ` AND wifi = ${wifi}` : ''
+      const departure =
+        departureTime !== '' ? ` AND departureTime = ${departureTime}` : ''
+      const arrived =
+        arrivedTime !== '' ? ` AND arrivedTime = ${arrivedTime}` : ''
+      const airline = mascapai !== '' ? ` AND mascapai = ${mascapai}` : ''
+      const prices = price !== '' ? `AND price = ${price}` : ''
+
+      const result = await getFlightModel(
+        fromCity,
+        toCity,
+        flightDate,
+        clas,
+        transit,
+        facLuggage,
+        facfood,
+        facwifi,
+        departure,
+        arrived,
+        airline,
+        prices,
+        sort
+      )
+      return helper.response(res, 200, 'Success get flight !', result)
+    } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }
   }

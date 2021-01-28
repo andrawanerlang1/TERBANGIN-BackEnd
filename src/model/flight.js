@@ -45,5 +45,29 @@ module.exports = {
         }
       )
     })
+  },
+  getFlightModel: (
+    fromCity,
+    toCity,
+    flightDate,
+    clas,
+    transit,
+    facLuggage,
+    facfood,
+    facwifi,
+    departure,
+    arrived,
+    airline,
+    prices,
+    sort
+  ) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM flight WHERE fromCity = ${fromCity} AND toCity = ${toCity} AND flightDate = ${flightDate} AND clas = ${clas}${transit}${facLuggage}${facfood}${facwifi}${departure}${arrived}${airline}${prices} ORDER BY ${sort}`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
   }
 }
