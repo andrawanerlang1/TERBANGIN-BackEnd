@@ -71,15 +71,10 @@ module.exports = {
     try {
       const { totalPassenger, flightId } = req.body
       const cap = await getTotalCapacity(flightId)
-      const b = cap
       const a = parseInt(totalPassenger)
-      //   console.log(b[0].capacity)
-      //   console.log(a)
-      //   console.log(b[0].capacity - a)
       const setData = {
         capacity: cap[0].capacity - a
       }
-      //   console.log(setData.capacity)
       if (setData.capacity < 0) {
         return helper.response(
           res,
