@@ -13,34 +13,34 @@ const nodemailer = require('nodemailer')
 module.exports = {
   login: async (request, response) => {
     try {
-      const { user_email, user_password } = request.body
+      const { email, password } = request.body
       console.log(request.body)
 
-      if (request.body.user_email === '') {
+      if (request.body.email === '') {
         return helper.response(response, 400, 'Insert email Please :)')
-      } else if (request.body.user_password === '') {
+      } else if (request.body.password === '') {
         return helper.response(response, 400, 'Insert Password Please :)')
       } else {
-        const checkDataUser = await login(user_email)
+        const checkDataUser = await login(email)
         console.log(checkDataUser)
         if (checkDataUser.length > 0) {
           const checkPassword = bcrypt.compareSync(
-            user_password,
-            checkDataUser[0].user_password
+            password,
+            checkDataUser[0].password
           )
           console.log(checkPassword)
           if (checkPassword) {
             const {
-              user_id,
-              user_name,
-              user_email,
-              user_role
+              userId ,
+              fullName,
+              email,
+              role
             } = checkDataUser[0]
             const paylot = {
-              user_id,
-              user_name,
-              user_email,
-              user_role
+              userId ,
+              fullName,
+              email,
+             role
             }
             const token = jwt.sign(paylot, 'KERJAIN', { expiresIn: '10h' })
             const result = { ...paylot, token }
@@ -60,42 +60,42 @@ module.exports = {
     try {
       console.log(request.body)
       const {
-        user_name,
-        user_email,
-        user_numberPhone,
-        user_password
+        fullName,
+        email,
+        phoneNumber,
+        password
       } = request.body
       const salt = bcrypt.genSaltSync(10)
-      const encryptPassword = bcrypt.hashSync(user_password, salt)
+      const encryptPassword = bcrypt.hashSync(password, salt)
       const setData = {
-        user_name,
-        user_email,
-        user_numberPhone,
-        user_role: 0,
-        user_password: encryptPassword
+        fullName,
+        email,
+        phoneNumber,
+       role: 0,
+        password: encryptPassword
       }
-      const checkDataUser = await login(user_email)
-      console.log(request.body.user_email)
+      const checkDataUser = await login(email)
+      console.log(request.body.email)
       if (checkDataUser.length >= 1) {
         return helper.response(response, 400, 'Email has been register :((')
-      } else if (request.body.user_email === '') {
+      } else if (request.body.email === '') {
         return helper.response(response, 400, 'Insert EMAIL Please :))')
-      } else if (request.body.user_email.search('@') < 1) {
+      } else if (request.body.email.search('@') < 1) {
         return helper.response(
           response,
           400,
           'Email not valid  !!, must be @ s'
         )
       } else if (
-        request.body.user_password < 8 ||
-        request.body.user_password > 16
+        request.body.password < 8 ||
+        request.body.password > 16
       ) {
         return helper.response(
           response,
           400,
           'Password must be 8 - 16 characters '
         )
-      } else if (request.body.user_password === '') {
+      } else if (request.body.password === '') {
         return helper.response(response, 400, 'Insert Password Please')
       } else {
         const result = await register(setData)
@@ -129,15 +129,15 @@ module.exports = {
   },
   forgotPassword: async (request, response) => {
       try{
-        const { user_email } = request.body
-        const checkDataUser = await login(user_email)
+        const { email } = request.body
+        const checkDataUser = await login(email)
         const keys = Math.round(Math.random() * 10000)
         if (checkDataUser.length >= 1) {
           const setData = {
             user_key: keys,
             user_updated_at: new Date()
           }
-          await settings(setData, checkDataUser[0].user_id)
+          await settings(setData, checkDataUser[0].userId )
           const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 587,
@@ -149,9 +149,9 @@ module.exports = {
           })
           const mailOptions = {
             from: '"Terbangin " <terbangin@gmail.com', // sender address
-            to: user_email, // list of receivers
+            to: email, // list of receivers
             subject: 'terbangin.com - Forgot Password', // Subject line
-            html: `<p>To Account   ${user_email}</p>
+            html: `<p>To Account   ${email}</p>
             <p>Hello I am milla personal team from terbangin.com will help you to change your new password, please activate it on this page</p>
             <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
           }
