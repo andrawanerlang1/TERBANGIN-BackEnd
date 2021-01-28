@@ -1,6 +1,10 @@
-const router = require("express").Router();
+const router = require('express').Router()
+const user = require('./routes/user')
+const booking = require('./routes/booking')
+const flight = require('./routes/flight')
 
-const user = require("./routes/user");
-router.use("/user", user);
+router.use('/user', user)
+router.use('/flight', flight)
+router.use('/booking', booking)
 
-module.exports = router;
+module.exports = router
