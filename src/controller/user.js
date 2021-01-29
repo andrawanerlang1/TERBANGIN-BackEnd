@@ -122,7 +122,7 @@ module.exports = {
       if (checkDataUser.length >= 1) {
         const setData = {
           user_key: keys,
-          user_updated_at: new Date()
+          updatedAt: new Date()
         }
         await settings(setData, checkDataUser[0].userId)
         const transporter = nodemailer.createTransport({
