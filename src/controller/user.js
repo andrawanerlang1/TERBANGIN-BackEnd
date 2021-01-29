@@ -202,7 +202,7 @@ module.exports = {
             const salt = bcrypt.genSaltSync(7)
             const encryptPassword = bcrypt.hashSync(newPassword, salt)
             const setData = {
-              user_password: encryptPassword,
+              password: encryptPassword,
               userKey: 0,
               updatedAt: new Date()
             }
