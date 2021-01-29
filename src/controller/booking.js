@@ -3,7 +3,9 @@ const {
   postDataPassenger,
   getDataByBookingId,
   getDataBookingByUserId,
-  patchStatusBooking
+  patchStatusBooking,
+  getBookingDetail,
+  getDataBookingDetail
 } = require('../model/booking')
 // patchStatusBooking,
 // getBookingDetail
@@ -73,13 +75,27 @@ module.exports = {
       return helper.response(res, 400, 'Bad Request!', error)
     }
   },
+  getBookingDetail: async (req, res) => {
+    try {
+      const { id } = req.params
+      const checkBookingId = await getDataBookingDetail(id)
+      if (checkBookingId.length > 0) {
+        const result = await getBookingDetail(id)
+        return helper.response(res, 200, `Success get detail booking by booking id: ${id}`, result)
+      } else {
+        return helper.response(res, 404, `ID ${id} is not found!`)
+      }
+    } catch (error) {
+      return helper.response(res, 400, 'Bad Request!', error)
+    }
+  },
   patchStatusBooking: async (req, res) => {
     try {
       let { userId, id } = req.query
       userId = parseInt(userId)
       id = parseInt(id)
       const checkUserId = await getDataBookingByUserId(userId)
-      const checkBookingId = await getDataByBookingId(id)
+      const checkBookingId = await getDataByBookingId(id, userId)
       if (checkUserId.length > 0) {
         if (checkBookingId.length > 0) {
           const setData = {

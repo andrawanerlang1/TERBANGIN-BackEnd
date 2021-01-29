@@ -51,7 +51,18 @@ module.exports = {
       })
     })
   },
-  getDataByBookingId: (id) => {
+  getDataByBookingId: (id, userId) => {
+    return new Promise((resolve, reject) => {
+      connection.query(`SELECT * FROM booking WHERE bookingId=${id} AND userId=${userId} AND paymentStatus=0`, (error, result) => {
+        if (!error) {
+          resolve(result)
+        } else {
+          reject(error)
+        }
+      })
+    })
+  },
+  getDataBookingDetail: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(`SELECT * FROM booking WHERE bookingId=${id}`, (error, result) => {
         if (!error) {
@@ -73,9 +84,15 @@ module.exports = {
       })
     })
   },
-  getBookingDetail: () => {
+  getBookingDetail: (id) => {
     return new Promise((resolve, reject) => {
-
+      connection.query(`SELECT mascapai, mascapaiImage, fromCountry, toCountry, clas, terminal, gate, departureTime, booking.bookingId, booking.code FROM booking JOIN flight ON booking.flightId=flight.flightId WHERE bookingId=${id}`, (error, result) => {
+        if (!error) {
+          resolve(result)
+        } else {
+          reject(error)
+        }
+      })
     })
   }
 }
