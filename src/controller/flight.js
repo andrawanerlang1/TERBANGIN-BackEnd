@@ -124,8 +124,10 @@ module.exports = {
         food,
         wifi,
         luggage,
-        departureTime,
-        arrivedTime,
+        departureTimeStr,
+        departureTimeEnd,
+        arrivedTimeStr,
+        arrivedTimeEnd,
         mascapai,
         priceMin,
         priceMax,
@@ -135,7 +137,7 @@ module.exports = {
       const transitDir = transitDirect !== 0 ? 'transitType = 0' : ''
       const transit1x = transit1 !== 0 ? ' transitType = 1' : ''
       const transit2x = transit2 !== 0 ? ' transitType = 2' : ''
-      let transit =
+      const transit =
         transitDirect === '' && transit1 === '' && transit2 === ''
           ? ''
           : transitDirect === '' && transit1 === ''
@@ -152,9 +154,13 @@ module.exports = {
       const facfood = food !== '' ? ` AND food = ${food}` : ''
       const facwifi = wifi !== '' ? ` AND wifi = ${wifi}` : ''
       const departure =
-        departureTime !== '' ? ` AND departureTime = ${departureTime}` : ''
+        departureTimeStr !== '' && departureTimeEnd !== ''
+          ? ` AND departureTime BETWEEN '${departureTimeStr}' AND '${departureTimeEnd}'`
+          : ''
       const arrived =
-        arrivedTime !== '' ? ` AND arrivedTime = ${arrivedTime}` : ''
+        arrivedTimeStr !== '' && arrivedTimeEnd !== ''
+          ? ` AND arrivedTime BETWEEN '${arrivedTimeStr}' AND '${arrivedTimeEnd}'`
+          : ''
       const airline = mascapai !== '' ? ` AND mascapai = '${mascapai}'` : ''
       const sorting = sort === '' ? 'mascapai' : `${sort}`
 

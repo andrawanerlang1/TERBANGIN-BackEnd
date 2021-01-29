@@ -15,7 +15,8 @@ app.use(cors())
 app.use((request, response, next) => {
   response.header('Access-Control-Allow-Origin', '*')
   response.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-  response.header('Access-Control-Allow-Headers', 'Content-Type'); next()
+  response.header('Access-Control-Allow-Headers', 'Content-Type')
+  next()
 })
 
 app.use('/', routerNavigation)
@@ -23,6 +24,6 @@ app.get('*', (request, response) => {
   response.status(404).send('Path Not Found')
 })
 
-app.listen(3000, () => {
-  console.log('Express app is listening on port 3000')
+app.listen(process.env.port, () => {
+  console.log(`Express app is listening on port ${process.env.port}`)
 })
