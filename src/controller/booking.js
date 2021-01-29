@@ -7,8 +7,7 @@ const {
   getBookingDetail,
   getDataBookingDetail
 } = require('../model/booking')
-// patchStatusBooking,
-// getBookingDetail
+
 const helper = require('../helper/response')
 module.exports = {
   postBooking: async (req, res) => {
