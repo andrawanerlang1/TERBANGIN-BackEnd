@@ -132,17 +132,21 @@ module.exports = {
         sort
       } = req.query
 
-      const transitDir = transitDirect !== 0 ? ' transitType = 0' : ''
+      const transitDir = transitDirect !== 0 ? 'transitType = 0' : ''
       const transit1x = transit1 !== 0 ? ' transitType = 1' : ''
       const transit2x = transit2 !== 0 ? ' transitType = 2' : ''
-      const transit =
-        transitDir === '' && transit1x === '' && transit2x === ''
+      let transit =
+        transitDirect === '' && transit1 === '' && transit2 === ''
           ? ''
-          : transitDir === '' && transit1x === ''
+          : transitDirect === '' && transit1 === ''
           ? ` AND (${transit2x})`
-          : transitDir === ''
+          : transit1 === '' && transit2 === ''
+          ? `AND (${transitDir})`
+          : transitDirect === ''
           ? ` AND (${transit1x} OR${transit2x})`
           : ` AND (${transitDir} OR${transit1x} OR${transit2x})`
+
+      console.log(transit)
 
       const facLuggage = luggage !== '' ? ` AND luggage = ${luggage}` : ''
       const facfood = food !== '' ? ` AND food = ${food}` : ''
@@ -151,7 +155,8 @@ module.exports = {
         departureTime !== '' ? ` AND departureTime = ${departureTime}` : ''
       const arrived =
         arrivedTime !== '' ? ` AND arrivedTime = ${arrivedTime}` : ''
-      const airline = mascapai !== '' ? ` AND mascapai = ${mascapai}` : ''
+      const airline = mascapai !== '' ? ` AND mascapai = '${mascapai}'` : ''
+      const sorting = sort === '' ? 'mascapai' : `${sort}`
 
       const result = await getFlightModel(
         fromCity,
@@ -167,10 +172,20 @@ module.exports = {
         airline,
         priceMin,
         priceMax,
-        sort
+        sorting
       )
-      return helper.response(res, 200, 'Success get flight !', result)
+      if (result.length > 0) {
+        return helper.response(res, 200, 'Success get flight !', result)
+      } else {
+        return helper.response(
+          res,
+          400,
+          'There is no flight for that condition !',
+          result
+        )
+      }
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   }
