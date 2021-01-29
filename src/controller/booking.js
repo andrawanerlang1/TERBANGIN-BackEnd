@@ -27,19 +27,25 @@ module.exports = {
             contactNumber
           } = data[0]
 
-          const setData = {
-            userId,
-            flightId,
-            totalPassenger,
-            contactFullName,
-            contactEmail,
-            contactNumber,
-            totalPayment,
-            paymentStatus: 0,
-            code: require('crypto').randomBytes(8).toString('hex'),
-            createdAt: new Date()
+          if (contactFullName &&
+            contactEmail &&
+            contactNumber) {
+            const setData = {
+              userId,
+              flightId,
+              totalPassenger,
+              contactFullName,
+              contactEmail,
+              contactNumber,
+              totalPayment,
+              paymentStatus: 0,
+              code: require('crypto').randomBytes(8).toString('hex'),
+              createdAt: new Date()
+            }
+            result = await postBooking(setData)
+          } else {
+            return helper.response(res, 400, 'Please fill out the form first!')
           }
-          result = await postBooking(setData)
         } else {
           const {
             title,
@@ -47,13 +53,19 @@ module.exports = {
             nationality
           } = data[i]
 
-          const setDataPassenger = {
-            bookingId: result.bookingId,
-            title,
-            fullName,
-            nationality
+          if (title &&
+            fullName &&
+            nationality) {
+            const setDataPassenger = {
+              bookingId: result.bookingId,
+              title,
+              fullName,
+              nationality
+            }
+            await postDataPassenger(setDataPassenger)
+          } else {
+            return helper.response(res, 400, 'Please, fill out the form first')
           }
-          await postDataPassenger(setDataPassenger)
         }
       }
       return helper.response(res, 200, 'Success booking! Enjoy your trip!', result)
