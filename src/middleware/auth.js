@@ -33,7 +33,7 @@ module.exports = {
       } else {
         console.log(result)
 
-        if (result.user_role === 1) {
+        if (result.role === 1) {
           request.token = result
           next()
         } else {

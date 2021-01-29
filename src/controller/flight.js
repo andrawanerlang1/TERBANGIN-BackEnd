@@ -3,7 +3,8 @@ const helper = require('../helper/response')
 const {
   postFlightModel,
   updateCapacityModel,
-  getTotalCapacity
+  getTotalCapacity,
+  getFlightModel
 } = require('../model/flight')
 
 module.exports = {
@@ -11,10 +12,13 @@ module.exports = {
     try {
       const {
         mascapai,
-        facilities,
         departureTime,
         arrivedTime,
+        flightDate,
         price,
+        food,
+        wifi,
+        luggage,
         capacity,
         clas,
         fromCity,
@@ -27,7 +31,7 @@ module.exports = {
       } = req.body
       if (
         mascapai &&
-        facilities &&
+        flightDate &&
         departureTime &&
         arrivedTime &&
         price &&
@@ -44,10 +48,13 @@ module.exports = {
         const setData = {
           mascapai,
           mascapaiImage: req.file === undefined ? '' : req.file.filename,
-          facilities,
+          flightDate,
           departureTime,
           arrivedTime,
           price,
+          food,
+          wifi,
+          luggage,
           capacity,
           clas,
           fromCity,
@@ -61,7 +68,7 @@ module.exports = {
         const result = await postFlightModel(setData)
         return helper.response(res, 200, 'Success add new flight', result)
       } else {
-        return helper.response(res, 400, 'All data must be filled in')
+        return helper.response(res, 400, 'Please fill out the form correctly')
       }
     } catch (error) {
       console.log(error)
@@ -98,6 +105,84 @@ module.exports = {
             'Success book your flight, thank you !'
           )
         }
+      }
+    } catch (error) {
+      console.log(error)
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  getFlight: async (req, res) => {
+    try {
+      const {
+        fromCity,
+        toCity,
+        flightDate,
+        clas,
+        transitDirect,
+        transit1,
+        transit2,
+        food,
+        wifi,
+        luggage,
+        departureTime,
+        arrivedTime,
+        mascapai,
+        priceMin,
+        priceMax,
+        sort
+      } = req.query
+
+      const transitDir = transitDirect !== 0 ? 'transitType = 0' : ''
+      const transit1x = transit1 !== 0 ? ' transitType = 1' : ''
+      const transit2x = transit2 !== 0 ? ' transitType = 2' : ''
+      let transit =
+        transitDirect === '' && transit1 === '' && transit2 === ''
+          ? ''
+          : transitDirect === '' && transit1 === ''
+          ? ` AND (${transit2x})`
+          : transit1 === '' && transit2 === ''
+          ? `AND (${transitDir})`
+          : transitDirect === ''
+          ? ` AND (${transit1x} OR${transit2x})`
+          : ` AND (${transitDir} OR${transit1x} OR${transit2x})`
+
+      console.log(transit)
+
+      const facLuggage = luggage !== '' ? ` AND luggage = ${luggage}` : ''
+      const facfood = food !== '' ? ` AND food = ${food}` : ''
+      const facwifi = wifi !== '' ? ` AND wifi = ${wifi}` : ''
+      const departure =
+        departureTime !== '' ? ` AND departureTime = ${departureTime}` : ''
+      const arrived =
+        arrivedTime !== '' ? ` AND arrivedTime = ${arrivedTime}` : ''
+      const airline = mascapai !== '' ? ` AND mascapai = '${mascapai}'` : ''
+      const sorting = sort === '' ? 'mascapai' : `${sort}`
+
+      const result = await getFlightModel(
+        fromCity,
+        toCity,
+        flightDate,
+        clas,
+        transit,
+        facLuggage,
+        facfood,
+        facwifi,
+        departure,
+        arrived,
+        airline,
+        priceMin,
+        priceMax,
+        sorting
+      )
+      if (result.length > 0) {
+        return helper.response(res, 200, 'Success get flight !', result)
+      } else {
+        return helper.response(
+          res,
+          400,
+          'There is no flight for that condition !',
+          result
+        )
       }
     } catch (error) {
       console.log(error)
