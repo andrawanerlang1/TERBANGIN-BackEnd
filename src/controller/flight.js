@@ -4,7 +4,8 @@ const {
   postFlightModel,
   updateCapacityModel,
   getTotalCapacity,
-  getFlightModel
+  getFlightModel,
+  getAllFlightModel
 } = require('../model/flight')
 
 module.exports = {
@@ -196,6 +197,14 @@ module.exports = {
       }
     } catch (error) {
       console.log(error)
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  getAllFlight: async (req, res) => {
+    try {
+      const result = await getAllFlightModel()
+      return helper.response(res, 200, 'Success get all flight !', result)
+    } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }
   }

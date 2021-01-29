@@ -69,5 +69,12 @@ module.exports = {
         }
       )
     })
+  },
+  getAllFlightModel: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(`SELECT * FROM flight`, (error, result) => {
+        !error ? resolve(result) : reject(new Error(error))
+      })
+    })
   }
 }
