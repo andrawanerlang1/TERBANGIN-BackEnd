@@ -6,6 +6,7 @@ const {
   getRoomModel,
   sendMessageModel,
   getMessageModel,
+  getRoom2UserModel,
   getAdminModel
 } = require('../model/chat')
 
@@ -47,8 +48,16 @@ module.exports = {
       return helper.response(response, 400, 'Bad Request', error)
     }
   },
+  getRoom2User: async (request, response) => {
+    const { sender, receiver } = request.query
+    try {
+      const result = await getRoom2UserModel(sender, receiver)
+      return helper.response(response, 200, 'Here is your room info', result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
   getAdmin: async (request, response) => {
-    console.log(request)
     try {
       const result = await getAdminModel()
       return helper.response(response, 200, 'Here is admin list', result)
