@@ -27,7 +27,8 @@ module.exports = {
         toCountry,
         tripType,
         terminal,
-        transitType
+        transitType,
+        gate
       } = req.body
       if (
         mascapai &&
@@ -43,7 +44,8 @@ module.exports = {
         toCountry &&
         tripType &&
         terminal &&
-        transitType
+        transitType &&
+        gate
       ) {
         const setData = {
           mascapai,
@@ -63,7 +65,8 @@ module.exports = {
           toCountry,
           tripType,
           terminal,
-          transitType
+          transitType,
+          gate
         }
         const result = await postFlightModel(setData)
         return helper.response(res, 200, 'Success add new flight', result)
