@@ -25,7 +25,6 @@ app.get('*', (request, response) => {
   response.status(404).send('Path Not Found')
 })
 
-//Socket Io =============================================================
 const http = require('http')
 const server = http.createServer(app)
 const io = socket(server, {
@@ -57,10 +56,6 @@ io.on('connection', (socket) => {
     console.log(data)
 
     socket.join(data.room)
-    // socket.broadcast.to(data.room).emit("chatMessage", {
-    //   username: "BOT",
-    //   message: `${data.username} Joined Chat !`,
-    // });
   })
   socket.on('changeRoom', (data) => {
     console.log('changeRoom ')
@@ -68,12 +63,7 @@ io.on('connection', (socket) => {
 
     socket.leave(data.oldRoom)
     socket.join(data.room)
-    // socket.broadcast.to(data.room).emit("chatMessage", {
-    //   username: "BOT",
-    //   message: `${data.username} Joined Chat !`,
-    // });
   })
-  // =
   socket.on('roomMessage', (data) => {
     console.log('roomMessage ')
     console.log(data)
@@ -84,7 +74,6 @@ io.on('connection', (socket) => {
     socket.broadcast.to(data.room).emit('typingMessage', data)
   })
 })
-// =================================================================
 
 server.listen(process.env.port, () => {
   console.log(`Express app is listening on port ${process.env.port}`)
