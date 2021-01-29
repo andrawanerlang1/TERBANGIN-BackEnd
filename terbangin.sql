@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 28 Jan 2021 pada 01.14
+-- Waktu pembuatan: 28 Jan 2021 pada 15.58
 -- Versi server: 10.4.14-MariaDB
--- Versi PHP: 7.4.11
+-- Versi PHP: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,6 +33,7 @@ CREATE TABLE `booking` (
   `totalPassenger` int(2) NOT NULL,
   `flightId` int(5) NOT NULL,
   `paymentStatus` int(1) NOT NULL,
+  `totalPayment` int(30) NOT NULL,
   `code` varchar(10) NOT NULL,
   `contactFullname` varchar(50) NOT NULL,
   `contactEmail` varchar(50) NOT NULL,
@@ -40,7 +41,7 @@ CREATE TABLE `booking` (
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
+ 
 -- --------------------------------------------------------
 
 --
@@ -66,10 +67,13 @@ CREATE TABLE `flight` (
   `flightId` int(10) NOT NULL,
   `mascapai` varchar(20) NOT NULL,
   `mascapaiImage` varchar(100) NOT NULL,
-  `facilities` int(2) NOT NULL,
   `departureTime` datetime NOT NULL DEFAULT current_timestamp(),
   `arrivedTime` datetime NOT NULL DEFAULT current_timestamp(),
+  `flightDate` datetime NOT NULL DEFAULT current_timestamp(),
   `price` int(10) NOT NULL,
+  `food` int(11) NOT NULL DEFAULT 0,
+  `wifi` int(11) NOT NULL DEFAULT 0,
+  `luggage` int(11) NOT NULL DEFAULT 0,
   `capacity` int(4) NOT NULL,
   `clas` int(2) NOT NULL,
   `fromCity` varchar(30) NOT NULL,
@@ -78,7 +82,7 @@ CREATE TABLE `flight` (
   `toCountry` varchar(30) NOT NULL,
   `tripType` varchar(3) NOT NULL,
   `terminal` varchar(10) NOT NULL,
-  `transitType` varchar(30) NOT NULL
+  `transitType` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -119,7 +123,7 @@ CREATE TABLE `roomchat` (
 CREATE TABLE `user` (
   `userId` int(5) NOT NULL,
   `email` varchar(40) NOT NULL,
-  `password` varchar(40) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `fullName` varchar(50) NOT NULL,
   `profileImage` varchar(200) NOT NULL,
   `phoneNumber` int(20) NOT NULL,

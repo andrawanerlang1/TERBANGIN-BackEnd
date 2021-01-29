@@ -19,7 +19,7 @@ module.exports = {
   login: (account) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT userId, email, password , role FROM user WHERE email = ?',
+        'SELECT userId, email, password, role FROM user WHERE email=?',
         account,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
@@ -72,7 +72,7 @@ module.exports = {
   settings: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'UPDATE user SET ? WHERE userId = ?',
+        'UPDATE user SET ? WHERE userId  = ?',
         [setData, id],
         (error, result) => {
           if (!error) {

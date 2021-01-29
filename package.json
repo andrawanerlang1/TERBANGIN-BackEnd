@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "qs": "^6.9.4"
   },
   "devDependencies": {
+    "nodemon": "^2.0.7",
     "standard": "^16.0.3"
   }
 }

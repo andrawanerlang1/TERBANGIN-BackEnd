@@ -56,6 +56,7 @@ module.exports = {
   register: async (request, response) => {
     try {
       console.log(request.body)
+
       const { fullName, email, password } = request.body
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(password, salt)
@@ -63,8 +64,7 @@ module.exports = {
         fullName,
         email,
         role: 0,
-        password: encryptPassword,
-        createdAt: new Date()
+        password: encryptPassword
       }
       const checkDataUser = await login(email)
       console.log(request.body.email)
@@ -143,6 +143,7 @@ module.exports = {
           html: `<p>To Account   ${email}</p>
             <p>Hello I am milla personal team from terbangin.com will help you to change your new password, please activate it on this page</p>
             <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
+
         }
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
@@ -214,39 +215,6 @@ module.exports = {
       return helper.response(response, 400, 'Bad Request', error)
     }
   },
-  patchimg: async (request, response) => {
-    const { id } = request.params
-    try {
-      const setData = {
-        profileImage: request.file.filename
-      }
-      const checkId = await getuserbyId(id)
-      if (checkId.length > 0) {
-        if (
-          checkId[0].profileImage === 'blank-profile.jpg' ||
-          request.file === undefined
-        ) {
-          const result = await settings(setData, id)
-          return helper.response(response, 201, 'Profile Updated', result)
-        } else {
-          fs.unlink(
-            `./uploads/user${checkId[0].profileImage}`,
-            async (error) => {
-              if (error) {
-                throw error
-              } else {
-                const result = await settings(setData, id)
-                return helper.response(response, 201, 'Profile Updated', result)
-              }
-            }
-          )
-        }
-      }
-    } catch (error) {
-      console.log(error)
-      return helper.response(response, 400, 'Bad Request', error)
-    }
-  },
   settings: async (request, response) => {
     try {
       const { id } = request.params
@@ -260,7 +228,6 @@ module.exports = {
       } = request.body
       const setData = {
         fullName,
-        profileImage: 'blank-profile.jpg',
         email,
         phoneNumber,
         city,
