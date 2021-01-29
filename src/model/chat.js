@@ -1,7 +1,7 @@
 const connection = require('../config/mysql')
 
 module.exports = {
-  createroomchatModel: (setData) => {
+  createRoomModel: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query(
         'INSERT INTO roomchat SET ?',
@@ -12,7 +12,7 @@ module.exports = {
       )
     })
   },
-  checkroomchatModel: (a, b) => {
+  checkRoomModel: (a, b) => {
     return new Promise((resolve, reject) => {
       connection.query(
         'SELECT * FROM roomchat WHERE sender = ? AND receiver = ?',
@@ -28,7 +28,7 @@ module.exports = {
       )
     })
   },
-  getroomchatModel: (userId) => {
+  getRoomModel: (userId) => {
     return new Promise((resolve, reject) => {
       connection.query(
         'SELECT roomIdUniq, user.userId,  user.fullName , user.profileImage FROM roomchat RIGHT JOIN user ON user.userId = receiver WHERE sender = ? ',
