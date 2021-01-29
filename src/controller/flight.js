@@ -137,9 +137,9 @@ module.exports = {
         sort
       } = req.query
 
-      const transitDir = transitDirect !== 0 ? 'transitType = 0' : ''
-      const transit1x = transit1 !== 0 ? ' transitType = 1' : ''
-      const transit2x = transit2 !== 0 ? ' transitType = 2' : ''
+      const transitDir = transitDirect !== 0 ? ` transitType = '0'` : ''
+      const transit1x = transit1 !== 0 ? ` transitType = '1'` : ''
+      const transit2x = transit2 !== 0 ? ` transitType = '2'` : ''
       const transit =
         transitDirect === '' && transit1 === '' && transit2 === ''
           ? ''
@@ -164,8 +164,12 @@ module.exports = {
         arrivedTimeStr !== '' && arrivedTimeEnd !== ''
           ? ` AND arrivedTime BETWEEN '${arrivedTimeStr}' AND '${arrivedTimeEnd}'`
           : ''
+      const price =
+        priceMin !== '' && priceMax !== ''
+          ? ` AND price BETWEEN '${priceMin}' AND '${priceMax}'`
+          : ''
       const airline = mascapai !== '' ? ` AND mascapai = '${mascapai}'` : ''
-      const sorting = sort === '' ? 'mascapai' : `${sort}`
+      const sorting = sort === '' ? 'price' : `${sort}`
 
       const result = await getFlightModel(
         fromCity,
@@ -179,8 +183,7 @@ module.exports = {
         departure,
         arrived,
         airline,
-        priceMin,
-        priceMax,
+        price,
         sorting
       )
       if (result.length > 0) {

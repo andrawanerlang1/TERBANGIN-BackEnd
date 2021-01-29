@@ -58,13 +58,12 @@ module.exports = {
     departure,
     arrived,
     airline,
-    priceMin,
-    priceMax,
+    price,
     sorting
   ) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM flight WHERE fromCity = '${fromCity}' AND toCity = '${toCity}' AND flightDate = ${flightDate} AND clas = ${clas}${transit}${facLuggage}${facfood}${facwifi}${departure}${arrived}${airline} AND price BETWEEN ${priceMin} AND ${priceMax} ORDER BY ${sorting}`,
+        `SELECT * FROM flight WHERE fromCity = '${fromCity}' AND toCity = '${toCity}' AND flightDate = '${flightDate}' AND clas = '${clas}'${transit}${facLuggage}${facfood}${facwifi}${departure}${arrived}${airline}${price} ORDER BY ${sorting}`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
