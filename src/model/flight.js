@@ -1,5 +1,4 @@
 const connection = require('../config/mysql')
-// const fs = require('fs')
 
 module.exports = {
   postFlightModel: (setData) => {
@@ -72,9 +71,20 @@ module.exports = {
   },
   getAllFlightModel: () => {
     return new Promise((resolve, reject) => {
-      connection.query(`SELECT * FROM flight`, (error, result) => {
+      connection.query('SELECT * FROM flight', (error, result) => {
         !error ? resolve(result) : reject(new Error(error))
       })
+    })
+  },
+  getFlightByIdModel: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM flight WHERE flightId = ?',
+        id,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
     })
   }
 }

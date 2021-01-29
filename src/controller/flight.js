@@ -5,7 +5,8 @@ const {
   updateCapacityModel,
   getTotalCapacity,
   getFlightModel,
-  getAllFlightModel
+  getAllFlightModel,
+  getFlightByIdModel
 } = require('../model/flight')
 
 module.exports = {
@@ -136,9 +137,9 @@ module.exports = {
         sort
       } = req.query
 
-      const transitDir = transitDirect !== 0 ? ` transitType = '0'` : ''
-      const transit1x = transit1 !== 0 ? ` transitType = '1'` : ''
-      const transit2x = transit2 !== 0 ? ` transitType = '2'` : ''
+      const transitDir = transitDirect !== 0 ? " transitType = '0'" : ''
+      const transit1x = transit1 !== 0 ? " transitType = '1'" : ''
+      const transit2x = transit2 !== 0 ? " transitType = '2'" : ''
       const transit =
         transitDirect === '' && transit1 === '' && transit2 === ''
           ? ''
@@ -204,6 +205,24 @@ module.exports = {
     try {
       const result = await getAllFlightModel()
       return helper.response(res, 200, 'Success get all flight !', result)
+    } catch (error) {
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  getFlightById: async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await getFlightByIdModel(id)
+      if (result.length > 0) {
+        return helper.response(
+          res,
+          200,
+          `Success get flight by id : ${id} !`,
+          result
+        )
+      } else {
+        return helper.response(res, 404, `There is no flight with id ${id}`)
+      }
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }

@@ -11,7 +11,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const fs = require('fs')
-const response = require('../helper/response')
 
 module.exports = {
   login: async (request, response) => {
