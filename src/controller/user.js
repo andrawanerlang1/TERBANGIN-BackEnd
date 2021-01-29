@@ -11,6 +11,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const fs = require('fs')
+const response = require('../helper/response')
 
 module.exports = {
   login: async (request, response) => {
@@ -143,7 +144,6 @@ module.exports = {
           html: `<p>To Account   ${email}</p>
             <p>Hello I am milla personal team from terbangin.com will help you to change your new password, please activate it on this page</p>
             <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
-
         }
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
@@ -209,6 +209,34 @@ module.exports = {
             await settings(setData, userId)
             return helper.response(response, 200, 'Password Succes change yey')
           }
+        }
+      }
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  patchimg: async (request, response) => {
+    try {
+      const { id } = request.params
+      console.log(id)
+      console.log(request.body)
+      const setData = {
+        profileImage: request.file.filename
+      }
+      const cekId = await getuserbyId(id)
+      if (cekId.length > 0) {
+        if (cekId[0].profileImage === '' || request.file === undefined) {
+          const result = await settings(setData, id)
+          return helper.response(response, 201, 'Profile Updated', result)
+        } else {
+          fs.unlink(`./uploads/user${cekId[0].profileImage}`, async (error) => {
+            if (error) {
+              throw error
+            } else {
+              const result = await settings(setData, id)
+              return helper.response(response, 201, 'Profile Updated', result)
+            }
+          })
         }
       }
     } catch (error) {

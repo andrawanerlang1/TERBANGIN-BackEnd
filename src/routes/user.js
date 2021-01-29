@@ -3,7 +3,7 @@ const {
   login,
   register,
   getuserbyId,
-//   patchimg,
+  patchimg,
   forgotPassword,
   resetPassword,
   settings
@@ -18,6 +18,6 @@ router.patch('/reset', resetPassword)
 // ==> User <==
 router.get('/:id', getuserbyId)
 router.patch('/settings/:id', settings)
-// router.patch('/img/:id', uploadImage, patchimg)
+router.patch('/img/:id', patchimg)
 
 module.exports = router

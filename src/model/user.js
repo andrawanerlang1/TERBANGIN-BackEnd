@@ -68,7 +68,6 @@ module.exports = {
       )
     })
   },
-
   settings: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
