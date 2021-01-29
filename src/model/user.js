@@ -8,7 +8,7 @@ module.exports = {
   dataUser: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM user WHERE user_id =? AND user_role = 0 ',
+        'SELECT * FROM user WHERE userId =? AND role = 0 ',
         id,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
@@ -19,7 +19,7 @@ module.exports = {
   login: (account) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT user_id, user_email, user_password ,user_role FROM user WHERE user_email = ?',
+        'SELECT userId, email, password, role FROM user WHERE email=?',
         account,
         (error, result) => {
           console.log(error)
@@ -33,10 +33,10 @@ module.exports = {
       connection.query('INSERT INTO user SET ?', setData, (error, result) => {
         if (!error) {
           const newResult = {
-            user_id: result.insertId,
+            userId: result.insertId,
             ...setData
           }
-          delete newResult.user_password
+          delete newResult.password
           resolve(newResult)
         } else {
           reject(new Error(error))
