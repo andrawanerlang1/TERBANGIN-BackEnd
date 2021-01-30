@@ -4,7 +4,9 @@ const {
   postFlightModel,
   updateCapacityModel,
   getTotalCapacity,
-  getFlightModel
+  getFlightModel,
+  getAllFlightModel,
+  getFlightByIdModel
 } = require('../model/flight')
 
 module.exports = {
@@ -29,6 +31,7 @@ module.exports = {
         terminal,
         transitType
       } = req.body
+      console.log(req.body)
       if (
         mascapai &&
         flightDate &&
@@ -124,27 +127,29 @@ module.exports = {
         food,
         wifi,
         luggage,
-        departureTime,
-        arrivedTime,
+        departureTimeStr,
+        departureTimeEnd,
+        arrivedTimeStr,
+        arrivedTimeEnd,
         mascapai,
         priceMin,
         priceMax,
         sort
       } = req.query
 
-      const transitDir = transitDirect !== 0 ? 'transitType = 0' : ''
-      const transit1x = transit1 !== 0 ? ' transitType = 1' : ''
-      const transit2x = transit2 !== 0 ? ' transitType = 2' : ''
-      let transit =
+      const transitDir = transitDirect !== 0 ? " transitType = '0'" : ''
+      const transit1x = transit1 !== 0 ? " transitType = '1'" : ''
+      const transit2x = transit2 !== 0 ? " transitType = '2'" : ''
+      const transit =
         transitDirect === '' && transit1 === '' && transit2 === ''
           ? ''
           : transitDirect === '' && transit1 === ''
-          ? ` AND (${transit2x})`
-          : transit1 === '' && transit2 === ''
-          ? `AND (${transitDir})`
-          : transitDirect === ''
-          ? ` AND (${transit1x} OR${transit2x})`
-          : ` AND (${transitDir} OR${transit1x} OR${transit2x})`
+            ? ` AND (${transit2x})`
+            : transit1 === '' && transit2 === ''
+              ? `AND (${transitDir})`
+              : transitDirect === ''
+                ? ` AND (${transit1x} OR${transit2x})`
+                : ` AND (${transitDir} OR${transit1x} OR${transit2x})`
 
       console.log(transit)
 
@@ -152,11 +157,19 @@ module.exports = {
       const facfood = food !== '' ? ` AND food = ${food}` : ''
       const facwifi = wifi !== '' ? ` AND wifi = ${wifi}` : ''
       const departure =
-        departureTime !== '' ? ` AND departureTime = ${departureTime}` : ''
+        departureTimeStr !== '' && departureTimeEnd !== ''
+          ? ` AND departureTime BETWEEN '${departureTimeStr}' AND '${departureTimeEnd}'`
+          : ''
       const arrived =
-        arrivedTime !== '' ? ` AND arrivedTime = ${arrivedTime}` : ''
+        arrivedTimeStr !== '' && arrivedTimeEnd !== ''
+          ? ` AND arrivedTime BETWEEN '${arrivedTimeStr}' AND '${arrivedTimeEnd}'`
+          : ''
+      const price =
+        priceMin !== '' && priceMax !== ''
+          ? ` AND price BETWEEN '${priceMin}' AND '${priceMax}'`
+          : ''
       const airline = mascapai !== '' ? ` AND mascapai = '${mascapai}'` : ''
-      const sorting = sort === '' ? 'mascapai' : `${sort}`
+      const sorting = sort === '' ? 'price' : `${sort}`
 
       const result = await getFlightModel(
         fromCity,
@@ -170,8 +183,7 @@ module.exports = {
         departure,
         arrived,
         airline,
-        priceMin,
-        priceMax,
+        price,
         sorting
       )
       if (result.length > 0) {
@@ -186,6 +198,32 @@ module.exports = {
       }
     } catch (error) {
       console.log(error)
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  getAllFlight: async (req, res) => {
+    try {
+      const result = await getAllFlightModel()
+      return helper.response(res, 200, 'Success get all flight !', result)
+    } catch (error) {
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  getFlightById: async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await getFlightByIdModel(id)
+      if (result.length > 0) {
+        return helper.response(
+          res,
+          200,
+          `Success get flight by id : ${id} !`,
+          result
+        )
+      } else {
+        return helper.response(res, 404, `There is no flight with id ${id}`)
+      }
+    } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }
   }
