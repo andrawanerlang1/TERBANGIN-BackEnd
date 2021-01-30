@@ -7,7 +7,8 @@ const {
   sendMessageModel,
   getMessageModel,
   getRoom2UserModel,
-  getAdminModel
+  getAdminModel,
+  getLastMessageModel
 } = require('../model/chat')
 
 module.exports = {
@@ -38,11 +39,17 @@ module.exports = {
     const { id } = request.params
     try {
       const result = await getRoomModel(id)
+      const arrResult = []
+      for (let i = 0; i < result.length; i++) {
+        const result2 = await getLastMessageModel(result[i].roomIdUniq)
+        const result3 = { ...result[i], message: result2[i].message, createdAt: result2[i].createdAt }
+        arrResult.push(result3)
+      }
       return helper.response(
         response,
         200,
         'Here is your chat room list',
-        result
+        arrResult
       )
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)

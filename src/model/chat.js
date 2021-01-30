@@ -98,5 +98,21 @@ module.exports = {
         }
       )
     })
+  },
+  getLastMessageModel: (a, b) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT message, createdAt FROM chat WHERE roomIdUniq = ? ORDER BY createdAt DESC LIMIT 1',
+        [a, b],
+        (error, result) => {
+          if (!error) {
+            resolve(result)
+          } else {
+            console.log(error)
+            reject(new Error(error))
+          }
+        }
+      )
+    })
   }
 }
