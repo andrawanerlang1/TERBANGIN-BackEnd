@@ -41,10 +41,14 @@ module.exports = {
       const result = await getRoomModel(id)
       const arrResult = []
       for (let i = 0; i < result.length; i++) {
-        const result2 = await getLastMessageModel(result[i].roomIdUniq)
-        const result3 = { ...result[i], message: result2[i].message, createdAt: result2[i].createdAt }
+        let result2 = await getLastMessageModel(result[i].roomIdUniq)
+        if (!result2[0]){
+          result2[0] = {message: '', createdAt: ''}
+        }
+        const result3 = { ...result[i], message: result2[0].message, createdAt: result2[0].createdAt }
         arrResult.push(result3)
       }
+      console.log(arrResult)
       return helper.response(
         response,
         200,
