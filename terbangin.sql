@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 28 Jan 2021 pada 15.58
+-- Waktu pembuatan: 29 Jan 2021 pada 16.11
 -- Versi server: 10.4.14-MariaDB
--- Versi PHP: 7.2.34
+-- Versi PHP: 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -41,7 +41,7 @@ CREATE TABLE `booking` (
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
- 
+
 -- --------------------------------------------------------
 
 --
@@ -67,8 +67,8 @@ CREATE TABLE `flight` (
   `flightId` int(10) NOT NULL,
   `mascapai` varchar(20) NOT NULL,
   `mascapaiImage` varchar(100) NOT NULL,
-  `departureTime` datetime NOT NULL DEFAULT current_timestamp(),
-  `arrivedTime` datetime NOT NULL DEFAULT current_timestamp(),
+  `departureTime` time NOT NULL,
+  `arrivedTime` time NOT NULL,
   `flightDate` datetime NOT NULL DEFAULT current_timestamp(),
   `price` int(10) NOT NULL,
   `food` int(11) NOT NULL DEFAULT 0,
@@ -82,8 +82,28 @@ CREATE TABLE `flight` (
   `toCountry` varchar(30) NOT NULL,
   `tripType` varchar(3) NOT NULL,
   `terminal` varchar(10) NOT NULL,
-  `transitType` int(1) NOT NULL DEFAULT 0
+  `transitType` int(1) NOT NULL DEFAULT 0,
+  `gate` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `flight`
+--
+
+INSERT INTO `flight` (`flightId`, `mascapai`, `mascapaiImage`, `departureTime`, `arrivedTime`, `flightDate`, `price`, `food`, `wifi`, `luggage`, `capacity`, `clas`, `fromCity`, `fromCountry`, `toCity`, `toCountry`, `tripType`, `terminal`, `transitType`, `gate`) VALUES
+(1, 'Air Asia', '2021-01-28T15-49-35.653Zairasia.png', '15:00:00', '15:45:00', '2021-01-30 00:00:00', 1200000, 1, 1, 0, 90, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 2, '222'),
+(2, 'Garuda Indonesia', '2021-01-29T06-07-05.305ZgarudaIndonesia.png', '06:45:00', '07:15:00', '2021-01-30 00:00:00', 600000, 1, 1, 0, 100, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 2, '212'),
+(3, 'Garuda Indonesia', '2021-01-29T06-08-43.747ZgarudaIndonesia.png', '07:50:00', '08:15:00', '2021-01-30 00:00:00', 550000, 1, 1, 1, 100, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 1, '212'),
+(4, 'Garuda Indonesia', '2021-01-29T06-09-22.352ZgarudaIndonesia.png', '07:50:00', '08:15:00', '2021-01-30 00:00:00', 550000, 1, 1, 1, 100, 2, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 0, '221'),
+(5, 'Garuda Indonesia', '2021-01-29T06-10-23.324ZgarudaIndonesia.png', '19:50:00', '20:15:00', '2021-01-30 00:00:00', 750000, 1, 1, 1, 100, 2, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 0, '221'),
+(6, 'Lion Air', '2021-01-29T06-12-10.457Zlionair.png', '19:00:00', '19:35:00', '2021-01-30 00:00:00', 350000, 1, 1, 0, 100, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A11', 1, '229'),
+(7, 'Citilink', '2021-01-29T06-12-55.733Zlionair.png', '12:00:00', '12:35:00', '2021-01-30 00:00:00', 375000, 1, 1, 1, 100, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A11', 1, '226'),
+(8, 'Lion Air', '2021-01-29T06-14-33.784Zlionair.png', '16:00:00', '16:35:00', '2021-01-30 00:00:00', 400000, 1, 1, 1, 100, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A11', 2, '232'),
+(9, 'Lion Air', '2021-01-29T06-15-33.283Zlionair.png', '18:00:00', '18:35:00', '2021-01-30 00:00:00', 500000, 0, 0, 1, 100, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A10', 0, '232'),
+(10, 'Air Asia', '2021-01-29T06-16-41.803Zairasia.png', '18:00:00', '18:35:00', '2021-01-30 00:00:00', 650000, 1, 0, 1, 100, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A14', 0, '234'),
+(11, 'Air Asia', '2021-01-29T06-17-19.663Zairasia.png', '20:00:00', '20:35:00', '2021-01-30 00:00:00', 600000, 1, 0, 1, 100, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A16', 0, '234'),
+(12, 'Air Asia', '2021-01-29T15-07-53.496Zairasia.png', '00:00:02', '00:00:02', '2021-01-31 00:00:00', 1200000, 1, 1, 1, 100, 2, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 2, ''),
+(13, 'Lion Air', '2021-01-29T15-09-40.410Zairasia.png', '00:00:02', '00:00:02', '2021-01-31 00:00:00', 1200000, 1, 1, 1, 100, 2, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 0, '');
 
 -- --------------------------------------------------------
 
@@ -135,6 +155,13 @@ CREATE TABLE `user` (
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `user`
+--
+
+INSERT INTO `user` (`userId`, `email`, `password`, `fullName`, `profileImage`, `phoneNumber`, `city`, `nationality`, `postCode`, `role`, `status`, `createdAt`, `updatedAt`) VALUES
+(1, 'andr7na@gmail.com', '$2b$10$GecrBC7c8oV6jJKkUSnjlepfU1bpimijqAFMrvkiisctZgPaN8eRi', 'andrawan', '', 85458345, '', '', 0, 0, 0, '2021-01-29 09:12:46', '2021-01-29 09:12:46');
 
 --
 -- Indexes for dumped tables
@@ -196,7 +223,7 @@ ALTER TABLE `chat`
 -- AUTO_INCREMENT untuk tabel `flight`
 --
 ALTER TABLE `flight`
-  MODIFY `flightId` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `flightId` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT untuk tabel `passenger`
@@ -214,7 +241,7 @@ ALTER TABLE `roomchat`
 -- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `userId` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `userId` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

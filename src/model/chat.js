@@ -44,6 +44,38 @@ module.exports = {
       )
     })
   },
+  getRoom2UserModel: (sender, receiver) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * from roomchat WHERE sender = ? AND receiver = ? ',
+        [sender, receiver],
+        (error, result) => {
+          if (!error) {
+            resolve(result)
+          } else {
+            console.log(error)
+            reject(new Error(error))
+          }
+        }
+      )
+    })
+  },
+  getAdminModel: (userId) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM user  WHERE role = 1 ',
+        [userId],
+        (error, result) => {
+          if (!error) {
+            resolve(result)
+          } else {
+            console.log(error)
+            reject(new Error(error))
+          }
+        }
+      )
+    })
+  },
   sendMessageModel: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO chat SET ?', setData, (error, result) => {
@@ -56,6 +88,22 @@ module.exports = {
       connection.query(
         'SELECT roomIdUniq, user.userId, user.fullName , message ,user.profileImage FROM chat RIGHT JOIN user ON user.userId = sender WHERE roomIdUniq = ?',
         [userId],
+        (error, result) => {
+          if (!error) {
+            resolve(result)
+          } else {
+            console.log(error)
+            reject(new Error(error))
+          }
+        }
+      )
+    })
+  },
+  getLastMessageModel: (a, b) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT message, createdAt FROM chat WHERE roomIdUniq = ? ORDER BY createdAt DESC LIMIT 1',
+        [a, b],
         (error, result) => {
           if (!error) {
             resolve(result)
