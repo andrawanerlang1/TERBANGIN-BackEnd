@@ -36,7 +36,8 @@ DB_HOST=localhost // Database host
 ## License
 trainer
 © [Bagus Tri Harjanto](https://github.com/bagusth15/)
-# our team Terbangin.com
+
+<h4>our team Terbangin.com</h4>
 [Andrawan](https://github.com/andrawanerlang1)
 [Rizqon](https://github.com/andrawanerlang1)
 [ilham]( https://github.com/IlhamHafsyah)
