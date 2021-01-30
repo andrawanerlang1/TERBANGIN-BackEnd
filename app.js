@@ -75,6 +75,7 @@ io.on('connection', (socket) => {
   })
 })
 
-server.listen(process.env.port, () => {
-  console.log(`Express app is listening on port ${process.env.port}`)
+server.listen(3000, () => {
+  console.log('Listening on Port 3000')
 })
+
