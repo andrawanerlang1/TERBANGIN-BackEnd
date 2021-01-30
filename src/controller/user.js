@@ -204,7 +204,7 @@ module.exports = {
             const encryptPassword = bcrypt.hashSync(newPassword, salt)
             const setData = {
               password: encryptPassword,
-              user_key: 0,
+              userKey: 0,
               updatedAt: new Date()
             }
             await settings(setData, userId)
