@@ -6,7 +6,8 @@ const {
   getTotalCapacity,
   getFlightModel,
   getAllFlightModel,
-  getFlightByIdModel
+  getFlightByIdModel,
+  dataCountModel
 } = require('../model/flight')
 
 module.exports = {
@@ -173,6 +174,20 @@ module.exports = {
       const airline = mascapai !== '' ? ` AND mascapai = '${mascapai}'` : ''
       const sorting = sort === '' ? 'price' : `${sort}`
 
+      const totalData = await dataCountModel(fromCity,
+        toCity,
+        flightDate,
+        clas,
+        transit,
+        facLuggage,
+        facfood,
+        facwifi,
+        departure,
+        arrived,
+        airline,
+        price,
+        sorting)
+      console.log(totalData);
       const result = await getFlightModel(
         fromCity,
         toCity,
