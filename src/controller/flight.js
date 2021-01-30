@@ -29,7 +29,8 @@ module.exports = {
         toCountry,
         tripType,
         terminal,
-        transitType
+        transitType,
+        flightCode
       } = req.body
       console.log(req.body)
       if (
@@ -66,7 +67,8 @@ module.exports = {
           toCountry,
           tripType,
           terminal,
-          transitType
+          transitType,
+          flightCode
         }
         const result = await postFlightModel(setData)
         return helper.response(res, 200, 'Success add new flight', result)
