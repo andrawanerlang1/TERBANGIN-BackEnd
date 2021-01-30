@@ -139,11 +139,11 @@ module.exports = {
           }
         })
         const mailOptions = {
-          from: '"Kerjain.com 👻" <Kerjain@gmail.com', // sender address
+          from: '"terbangin.com 👻" <terbangin@gmail.com', // sender address
           to: email, // list of receivers
-          subject: 'Kerjain.com - Forgot Password', // Subject line
+          subject: 'terbangin - Forgot Password', // Subject line
           html: `<p>To Account   $ email}</p>
-          <p>Hello I am milla personal team from Kerjain.com will help you to change your new password, please activate it on this page</p>
+          <p>Hello I am milla personal team from terbangin will help you to change your new password, please activate it on this page</p>
           <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
         }
         await transporter.sendMail(mailOptions, function (error, info) {
