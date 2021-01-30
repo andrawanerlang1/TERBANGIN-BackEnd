@@ -1,4 +1,5 @@
 const helper = require('../helper/response')
+const qs = require('querystring')
 // const fs = require('fs')
 const {
   postFlightModel,
@@ -119,7 +120,7 @@ module.exports = {
   },
   getFlight: async (req, res) => {
     try {
-      const {
+      let {
         fromCity,
         toCity,
         flightDate,
@@ -137,7 +138,9 @@ module.exports = {
         mascapai,
         priceMin,
         priceMax,
-        sort
+        sort,
+        page,
+        limit
       } = req.query
 
       const transitDir = transitDirect !== 0 ? " transitType = '0'" : ''
@@ -174,21 +177,10 @@ module.exports = {
       const airline = mascapai !== '' ? ` AND mascapai = '${mascapai}'` : ''
       const sorting = sort === '' ? 'price' : `${sort}`
 
-      const totalData = await dataCountModel(fromCity,
-        toCity,
-        flightDate,
-        clas,
-        transit,
-        facLuggage,
-        facfood,
-        facwifi,
-        departure,
-        arrived,
-        airline,
-        price,
-        sorting)
-      console.log(totalData);
-      const result = await getFlightModel(
+      page = parseInt(page)
+      limit = parseInt(limit)
+
+      const total = await dataCountModel(
         fromCity,
         toCity,
         flightDate,
@@ -203,8 +195,40 @@ module.exports = {
         price,
         sorting
       )
+      // console.log(totalData[0].total)
+      const totalData = total[0].total
+      const totalPage = Math.ceil(totalData / limit)
+      const offset = page * limit - limit
+      const previousLink = page > 1 ? qs.stringify({ ...req.query, ...{ page: page - 1 } }) : null
+      const nextLink = page < totalPage ? qs.stringify({ ...req.query, ...{ page: page + 1 } }) : null
+      const newPage = {
+        page,
+        limit,
+        totalPage,
+        totalData,
+        nextLink: nextLink && `http://localhost:3000/flight?${nextLink}`,
+        previousLink: previousLink && `http://localhost:3000/flight?${previousLink}`
+      }
+
+      const result = await getFlightModel(
+        fromCity,
+        toCity,
+        flightDate,
+        clas,
+        transit,
+        facLuggage,
+        facfood,
+        facwifi,
+        departure,
+        arrived,
+        airline,
+        price,
+        sorting,
+        limit,
+        offset
+      )
       if (result.length > 0) {
-        return helper.response(res, 200, 'Success get flight !', result)
+        return helper.response(res, 200, 'Success get flight !', result, newPage)
       } else {
         return helper.response(
           res,
