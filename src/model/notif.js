@@ -4,7 +4,14 @@ module.exports = {
   postNotifModel: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO notif SET ?', setData, (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))
+        if (!error) {
+          const newResult = {
+            ...setData
+          }
+          resolve(newResult)
+        } else {
+          reject(new Error(error))
+        }
       })
     })
   },
