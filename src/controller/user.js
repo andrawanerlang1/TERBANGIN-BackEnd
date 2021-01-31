@@ -4,6 +4,7 @@ const {
   dataUser,
   getuserbyId,
   getKeysmodel,
+  getIdmodel,
   settings
 } = require('../model/user')
 const helper = require('../helper/response')
@@ -11,7 +12,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const nodemailer = require('nodemailer')
 const fs = require('fs')
-const response = require('../helper/response')
 
 module.exports = {
   login: async (request, response) => {
@@ -119,6 +119,7 @@ module.exports = {
   },
   forgotPassword: async (request, response) => {
     try {
+      console.log(request.body)
       const { email } = request.body
       const checkDataUser = await login(email)
       const keys = Math.round(Math.random() * 10000)
@@ -138,12 +139,12 @@ module.exports = {
           }
         })
         const mailOptions = {
-          from: '"Terbangin " <terbangin@gmail.com', // sender address
+          from: '"terbangin.com 👻" <terbangin@gmail.com', // sender address
           to: email, // list of receivers
-          subject: 'terbangin.com - Forgot Password', // Subject line
-          html: `<p>To Account   ${email}</p>
-            <p>Hello I am milla personal team from terbangin.com will help you to change your new password, please activate it on this page</p>
-            <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
+          subject: 'terbangin - Forgot Password', // Subject line
+          html: `<p>To Account   $ email}</p>
+          <p>Hello I am milla personal team from terbangin will help you to change your new password, please activate it on this page</p>
+          <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
         }
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
@@ -158,7 +159,7 @@ module.exports = {
         return helper.response(response, 400, 'Email / Account not Registed !')
       }
     } catch (error) {
-      return helper.response(response, 'Bad Request', error)
+      console.log(error)
     }
   },
   resetPassword: async (request, response) => {
@@ -185,6 +186,60 @@ module.exports = {
         } else {
           const userId = getKeys[0].userId
           const update = new Date() - getKeys[0].updatedAt
+          const changeKeys = Math.floor(update / 1000 / 60)
+          if (changeKeys >= 5) {
+            const setData = {
+              userKey: 0,
+              updatedAt: new Date()
+            }
+            await settings(setData, userId)
+            return helper.response(
+              response,
+              400,
+              'Please confirm password again, keys is expires :))'
+            )
+          } else {
+            // new Password
+            const salt = bcrypt.genSaltSync(7)
+            const encryptPassword = bcrypt.hashSync(newPassword, salt)
+            const setData = {
+              password: encryptPassword,
+              userKey: 0,
+              updatedAt: new Date()
+            }
+            await settings(setData, userId)
+            return helper.response(response, 200, 'Password Succes change yey')
+          }
+        }
+      }
+    } catch (error) {
+      return helper(response, 400, 'Bad Request', error)
+    }
+  },
+  changePassword: async (request, response) => {
+    try {
+      console.log(request.body)
+      const { id, newPassword, confirmPassword } = request.body
+      if (newPassword.length < 8 || newPassword.length > 16) {
+        return helper.response(
+          response,
+          400,
+          'Password must be 8-16 characters long'
+        )
+      } else if (newPassword !== confirmPassword) {
+        return helper.response(
+          response,
+          400,
+          `Password didn't match ${newPassword}`
+        )
+      } else {
+        const getId = await getuserbyId(id)
+        console.log(getId)
+        if (getId.length < 1) {
+          return helper.response(response, 400, 'Bad Request')
+        } else {
+          const userId = getId[0].userId
+          const update = new Date() - getId[0].updatedAt
           const changeKeys = Math.floor(update / 1000 / 60)
           if (changeKeys >= 5) {
             const setData = {
@@ -239,6 +294,14 @@ module.exports = {
           })
         }
       }
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  deleteImg: async (request, response) => {
+    try {
+      const { id } = request.params
+      console.log(id)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }

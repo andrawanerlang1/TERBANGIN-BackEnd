@@ -5,7 +5,10 @@ const {
   checkRoomModel,
   getRoomModel,
   sendMessageModel,
-  getMessageModel
+  getMessageModel,
+  getRoom2UserModel,
+  getAdminModel,
+  getLastMessageModel
 } = require('../model/chat')
 
 module.exports = {
@@ -36,12 +39,39 @@ module.exports = {
     const { id } = request.params
     try {
       const result = await getRoomModel(id)
+      const arrResult = []
+      for (let i = 0; i < result.length; i++) {
+        let result2 = await getLastMessageModel(result[i].roomIdUniq)
+        if (!result2[0]){
+          result2[0] = {message: '', createdAt: ''}
+        }
+        const result3 = { ...result[i], message: result2[0].message, createdAt: result2[0].createdAt }
+        arrResult.push(result3)
+      }
+      console.log(arrResult)
       return helper.response(
         response,
         200,
         'Here is your chat room list',
-        result
+        arrResult
       )
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  getRoom2User: async (request, response) => {
+    const { sender, receiver } = request.query
+    try {
+      const result = await getRoom2UserModel(sender, receiver)
+      return helper.response(response, 200, 'Here is your room info', result)
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request', error)
+    }
+  },
+  getAdmin: async (request, response) => {
+    try {
+      const result = await getAdminModel()
+      return helper.response(response, 200, 'Here is admin list', result)
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
     }
