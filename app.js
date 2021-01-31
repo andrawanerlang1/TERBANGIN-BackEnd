@@ -76,5 +76,6 @@ io.on('connection', (socket) => {
 })
 
 server.listen(process.env.port, () => {
-  console.log(`Express app is listening on port ${process.env.port}`)
+  console.log(`Listening on Port ${process.env.port}`)
 })
+

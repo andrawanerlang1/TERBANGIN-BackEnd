@@ -1,4 +1,5 @@
 const helper = require('../helper/response')
+const qs = require('querystring')
 // const fs = require('fs')
 const {
   postFlightModel,
@@ -6,7 +7,9 @@ const {
   getTotalCapacity,
   getFlightModel,
   getAllFlightModel,
-  getFlightByIdModel
+  getFlightByIdModel,
+  dataCountModel,
+  allDataCountModel
 } = require('../model/flight')
 
 module.exports = {
@@ -29,7 +32,8 @@ module.exports = {
         toCountry,
         tripType,
         terminal,
-        transitType
+        transitType,
+        flightCode
       } = req.body
       console.log(req.body)
       if (
@@ -66,7 +70,8 @@ module.exports = {
           toCountry,
           tripType,
           terminal,
-          transitType
+          transitType,
+          flightCode
         }
         const result = await postFlightModel(setData)
         return helper.response(res, 200, 'Success add new flight', result)
@@ -116,7 +121,7 @@ module.exports = {
   },
   getFlight: async (req, res) => {
     try {
-      const {
+      let {
         fromCity,
         toCity,
         flightDate,
@@ -134,7 +139,9 @@ module.exports = {
         mascapai,
         priceMin,
         priceMax,
-        sort
+        sort,
+        page,
+        limit
       } = req.query
 
       const transitDir = transitDirect !== 0 ? " transitType = '0'" : ''
@@ -144,14 +151,15 @@ module.exports = {
         transitDirect === '' && transit1 === '' && transit2 === ''
           ? ''
           : transitDirect === '' && transit1 === ''
-            ? ` AND (${transit2x})`
-            : transit1 === '' && transit2 === ''
-              ? `AND (${transitDir})`
-              : transitDirect === ''
-                ? ` AND (${transit1x} OR${transit2x})`
-                : ` AND (${transitDir} OR${transit1x} OR${transit2x})`
+          ? ` AND (${transit2x})`
+          : transit1 === '' && transit2 === ''
+          ? `AND (${transitDir})`
+          : transitDirect === ''
+          ? ` AND (${transit1x} OR${transit2x})`
+          : ` AND (${transitDir} OR${transit1x} OR${transit2x})`
 
-      console.log(transit)
+      // console.log(transit)
+      console.log(clas)
 
       const facLuggage = luggage !== '' ? ` AND luggage = ${luggage}` : ''
       const facfood = food !== '' ? ` AND food = ${food}` : ''
@@ -171,7 +179,10 @@ module.exports = {
       const airline = mascapai !== '' ? ` AND mascapai = '${mascapai}'` : ''
       const sorting = sort === '' ? 'price' : `${sort}`
 
-      const result = await getFlightModel(
+      page = parseInt(page)
+      limit = parseInt(limit)
+
+      const total = await dataCountModel(
         fromCity,
         toCity,
         flightDate,
@@ -186,15 +197,106 @@ module.exports = {
         price,
         sorting
       )
-      if (result.length > 0) {
-        return helper.response(res, 200, 'Success get flight !', result)
-      } else {
+
+      const totalData = total[0].total
+      const totalPage = Math.ceil(totalData / limit)
+      const offset = page * limit - limit
+      console.log(req.query)
+      const previousLink =
+        page > 1 ? qs.stringify({ ...req.query, ...{ page: page - 1 } }) : null
+      const nextLink =
+        page < totalPage
+          ? qs.stringify({ ...req.query, ...{ page: page + 1 } })
+          : null
+      const newPage = {
+        page,
+        limit,
+        totalPage,
+        totalData,
+        nextLink: nextLink && `http://localhost:3000/flight?${nextLink}`,
+        previousLink:
+          previousLink && `http://localhost:3000/flight?${previousLink}`
+      }
+
+      if (
+        fromCity === '' &&
+        toCity === '' &&
+        flightDate === '' &&
+        clas === ''
+      ) {
+        const allData = await allDataCountModel()
+        const totalAllData = allData[0].totalData
+        const allDataTotalPage = Math.ceil(totalAllData / limit)
+        const offsetAllData = page * limit - limit
+        console.log(req.query)
+        const previousLink =
+          page > 1
+            ? qs.stringify({ ...req.query, ...{ page: page - 1 } })
+            : null
+        const nextLink =
+          page < allDataTotalPage
+            ? qs.stringify({ ...req.query, ...{ page: page + 1 } })
+            : null
+        const allDataPage = {
+          page,
+          limit,
+          allDataTotalPage,
+          totalAllData,
+          nextLink: nextLink && `http://localhost:3000/flight?${nextLink}`,
+          previousLink:
+            previousLink && `http://localhost:3000/flight?${previousLink}`
+        }
+        console.log(allDataPage.nextLink)
+        const result = await getAllFlightModel(limit, offsetAllData)
         return helper.response(
           res,
-          400,
-          'There is no flight for that condition !',
-          result
+          200,
+          'Success get all flight !',
+          result,
+          allDataPage
         )
+      } else {
+        clas =
+          clas === '1'
+            ? '(clas = 1 OR clas = 4 OR clas = 5 OR clas = 7)'
+            : clas === '2'
+            ? '(clas = 2 OR clas = 4 OR clas = 6 OR clas = 7)'
+            : clas === '3'
+            ? '(clas = 3 OR clas = 5 OR clas = 6 OR clas = 7)'
+            : ''
+        const result = await getFlightModel(
+          fromCity,
+          toCity,
+          flightDate,
+          clas,
+          transit,
+          facLuggage,
+          facfood,
+          facwifi,
+          departure,
+          arrived,
+          airline,
+          price,
+          sorting,
+          limit,
+          offset
+        )
+        if (result.length > 0) {
+          return helper.response(
+            res,
+            200,
+            'Success get flight !',
+            result,
+            newPage
+          )
+        } else {
+          return helper.response(
+            res,
+            400,
+            'There is no flight for that condition !',
+            result
+          )
+        }
       }
     } catch (error) {
       console.log(error)

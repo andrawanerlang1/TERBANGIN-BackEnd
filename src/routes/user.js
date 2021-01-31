@@ -4,7 +4,9 @@ const {
   register,
   getuserbyId,
   patchimg,
+  forgotPassword,
   resetPassword,
+  changePassword,
   deleteImg,
   settings
 } = require('../controller/user')
@@ -13,7 +15,9 @@ const uploadImage = require('../middleware/multerUser')
 // ==> Auth  <== //
 router.post('/login', login)
 router.post('/register', register)
-router.patch('/reset', resetPassword)
+router.post('/forgot', forgotPassword)
+router.post('/reset', resetPassword)
+router.patch('/changePassword', changePassword)
 // ==> User <==
 router.get('/:id', getuserbyId)
 router.patch('/settings/:id', settings)

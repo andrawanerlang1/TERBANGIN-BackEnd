@@ -58,22 +58,27 @@ module.exports = {
     arrived,
     airline,
     price,
-    sorting
+    sorting,
+    limit,
+    offset
   ) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM flight WHERE fromCity = '${fromCity}' AND toCity = '${toCity}' AND flightDate = '${flightDate}' AND clas = '${clas}'${transit}${facLuggage}${facfood}${facwifi}${departure}${arrived}${airline}${price} ORDER BY ${sorting}`,
+        `SELECT * FROM flight WHERE fromCity = '${fromCity}' AND toCity = '${toCity}' AND flightDate = '${flightDate}' AND ${clas}${transit}${facLuggage}${facfood}${facwifi}${departure}${arrived}${airline}${price} ORDER BY ${sorting} LIMIT ${limit} OFFSET ${offset}`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
       )
     })
   },
-  getAllFlightModel: () => {
+  getAllFlightModel: (limit, offset) => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM flight', (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))
-      })
+      connection.query(
+        `SELECT * FROM flight LIMIT ${limit} OFFSET ${offset}`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
     })
   },
   getFlightByIdModel: (id) => {
@@ -81,6 +86,40 @@ module.exports = {
       connection.query(
         'SELECT * FROM flight WHERE flightId = ?',
         id,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  dataCountModel: (
+    fromCity,
+    toCity,
+    flightDate,
+    clas,
+    transit,
+    facLuggage,
+    facfood,
+    facwifi,
+    departure,
+    arrived,
+    airline,
+    price,
+    sorting
+  ) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT COUNT(*) AS total FROM flight WHERE fromCity = '${fromCity}' AND toCity = '${toCity}' AND flightDate = '${flightDate}' AND clas = '${clas}'${transit}${facLuggage}${facfood}${facwifi}${departure}${arrived}${airline}${price} ORDER BY ${sorting}`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  allDataCountModel: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT COUNT(*) AS totalData FROM flight',
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }

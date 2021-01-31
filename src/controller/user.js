@@ -3,6 +3,7 @@ const {
   register,
   dataUser,
   getuserbyId,
+  getKeysmodel,
   getIdmodel,
   settings
 } = require('../model/user')
@@ -116,7 +117,106 @@ module.exports = {
       return helper.response(response, 400, 'Bad Request', error)
     }
   },
+  forgotPassword: async (request, response) => {
+    try {
+      console.log(request.body)
+      const { email } = request.body
+      const checkDataUser = await login(email)
+      const keys = Math.round(Math.random() * 10000)
+      if (checkDataUser.length >= 1) {
+        const setData = {
+          userKey: keys,
+          updatedAt: new Date()
+        }
+        await settings(setData, checkDataUser[0].userId)
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false, // true for 465, false for other ports
+          auth: {
+            user: 'kostkost169@gmail.com', // generated ethereal user
+            pass: 'admin@123456' // generated ethereal password
+          }
+        })
+        const mailOptions = {
+          from: '"terbangin.com 👻" <terbangin@gmail.com', // sender address
+          to: email, // list of receivers
+          subject: 'terbangin - Forgot Password', // Subject line
+          html: `<p>To Account  </p>
+          <p>Hello I am milla personal team from terbangin will help you to change your new password, please activate it on this page</p>
+          <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
+        }
+        await transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error)
+            return helper.response(response, 400, 'Email not send !')
+          } else {
+            console.log(info)
+            return helper.response(response, 200, 'Email has been send !')
+          }
+        })
+      } else {
+        return helper.response(response, 400, 'Email / Account not Registed !')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  },
   resetPassword: async (request, response) => {
+    try {
+      console.log(request.body)
+      const { key, newPassword, confirmPassword } = request.body
+      if (newPassword.length < 8 || newPassword.length > 16) {
+        return helper.response(
+          response,
+          400,
+          'Password must be 8-16 characters long'
+        )
+      } else if (newPassword !== confirmPassword) {
+        return helper.response(
+          response,
+          400,
+          `Password didn't match ${newPassword}`
+        )
+      } else {
+        const getKeys = await getKeysmodel(key)
+        console.log(getKeys)
+        if (getKeys.length < 1) {
+          return helper.response(response, 400, 'Bad Request')
+        } else {
+          const userId = getKeys[0].userId
+          const update = new Date() - getKeys[0].updatedAt
+          const changeKeys = Math.floor(update / 1000 / 60)
+          if (changeKeys >= 5) {
+            const setData = {
+              userKey: 0,
+              updatedAt: new Date()
+            }
+            await settings(setData, userId)
+            return helper.response(
+              response,
+              400,
+              'Please confirm password again, keys is expires :))'
+            )
+          } else {
+            // new Password
+            const salt = bcrypt.genSaltSync(7)
+            const encryptPassword = bcrypt.hashSync(newPassword, salt)
+            const setData = {
+              password: encryptPassword,
+              userKey: 0,
+              updatedAt: new Date()
+            }
+            await settings(setData, userId)
+            return helper.response(response, 200, 'Password Succes change yey')
+          }
+        }
+      }
+    } catch (error) {
+      return helper(response, 400, 'Bad Request', error)
+    }
+  },
+  changePassword: async (request, response) => {
     try {
       console.log(request.body)
       const { id, newPassword, confirmPassword } = request.body
