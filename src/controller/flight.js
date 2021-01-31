@@ -158,7 +158,8 @@ module.exports = {
           ? ` AND (${transit1x} OR${transit2x})`
           : ` AND (${transitDir} OR${transit1x} OR${transit2x})`
 
-      console.log(transit)
+      // console.log(transit)
+      console.log(clas)
 
       const facLuggage = luggage !== '' ? ` AND luggage = ${luggage}` : ''
       const facfood = food !== '' ? ` AND food = ${food}` : ''
@@ -255,6 +256,14 @@ module.exports = {
           allDataPage
         )
       } else {
+        clas =
+          clas === '1'
+            ? '(clas = 1 OR clas = 4 OR clas = 5 OR clas = 7)'
+            : clas === '2'
+            ? '(clas = 2 OR clas = 4 OR clas = 6 OR clas = 7)'
+            : clas === '3'
+            ? '(clas = 3 OR clas = 5 OR clas = 6 OR clas = 7)'
+            : ''
         const result = await getFlightModel(
           fromCity,
           toCity,
