@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 31 Jan 2021 pada 00.05
+-- Waktu pembuatan: 31 Jan 2021 pada 10.02
 -- Versi server: 10.4.14-MariaDB
--- Versi PHP: 7.4.11
+-- Versi PHP: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -110,6 +110,20 @@ INSERT INTO `flight` (`flightId`, `mascapai`, `mascapaiImage`, `departureTime`, 
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `notif`
+--
+
+CREATE TABLE `notif` (
+  `notifId` int(11) NOT NULL,
+  `notifTitle` varchar(255) NOT NULL,
+  `notifMessage` varchar(300) NOT NULL,
+  `receiverId` int(11) NOT NULL,
+  `createdAt` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `passenger`
 --
 
@@ -188,6 +202,12 @@ ALTER TABLE `flight`
   ADD PRIMARY KEY (`flightId`);
 
 --
+-- Indeks untuk tabel `notif`
+--
+ALTER TABLE `notif`
+  ADD PRIMARY KEY (`notifId`);
+
+--
 -- Indeks untuk tabel `passenger`
 --
 ALTER TABLE `passenger`
@@ -226,6 +246,12 @@ ALTER TABLE `chat`
 --
 ALTER TABLE `flight`
   MODIFY `flightId` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT untuk tabel `notif`
+--
+ALTER TABLE `notif`
+  MODIFY `notifId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `passenger`
