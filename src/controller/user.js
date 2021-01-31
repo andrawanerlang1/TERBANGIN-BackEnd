@@ -144,7 +144,7 @@ module.exports = {
           subject: 'terbangin - Forgot Password', // Subject line
           html: `<p>To Account  </p>
           <p>Hello I am milla personal team from terbangin will help you to change your new password, please activate it on this page</p>
-          <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
+          <a href=" http://localhost:8080/login?key=${keys}">Click Here To Change Password</a>`
         }
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
