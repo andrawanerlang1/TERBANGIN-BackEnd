@@ -47,15 +47,11 @@ module.exports = {
         return helper.response(
           response,
           200,
-          `Succeed Deleting the notif by user id ${id}`,
+          'Succeed Deleting the Notification History',
           result
         )
       } else {
-        return helper.response(
-          response,
-          404,
-          `Notif with user id : ${id} is not found`
-        )
+        return helper.response(response, 404, 'Notif is empty')
       }
     } catch (error) {
       return helper.response(response, 400, 'Bad Request', error)
