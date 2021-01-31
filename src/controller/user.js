@@ -142,7 +142,7 @@ module.exports = {
           from: '"terbangin.com 👻" <terbangin@gmail.com', // sender address
           to: email, // list of receivers
           subject: 'terbangin - Forgot Password', // Subject line
-          html: `<p>To Account   $ email}</p>
+          html: `<p>To Account  </p>
           <p>Hello I am milla personal team from terbangin will help you to change your new password, please activate it on this page</p>
           <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
         }
