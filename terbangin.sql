@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 31 Jan 2021 pada 10.02
+-- Waktu pembuatan: 31 Jan 2021 pada 10.17
 -- Versi server: 10.4.14-MariaDB
 -- Versi PHP: 7.2.34
 
@@ -118,7 +118,7 @@ CREATE TABLE `notif` (
   `notifTitle` varchar(255) NOT NULL,
   `notifMessage` varchar(300) NOT NULL,
   `receiverId` int(11) NOT NULL,
-  `createdAt` datetime NOT NULL
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
