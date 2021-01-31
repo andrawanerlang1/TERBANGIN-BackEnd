@@ -2,12 +2,13 @@ const router = require('express').Router()
 const {
   postNotif,
   getAllNotif,
-  getNotifById,
-  getBookingDetail
+  getNotifByUserId,
+  deleteNotifByUserId
 } = require('../controller/booking')
 
 router.get('/all', getAllNotif)
-router.get('/get/:id', getNotifById)
+router.get('/get/:id', getNotifByUserId)
 router.post('/post', postNotif)
+router.delete('/:id', deleteNotifByUserId)
 
 module.exports = router
