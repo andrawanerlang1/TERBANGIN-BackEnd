@@ -16,7 +16,12 @@ module.exports = {
         receiverId
       }
       const result = await postNotifModel(setData)
-      return helper.response(response, 200, 'Notification Sent', result)
+      return helper.response(
+        response,
+        200,
+        'Check your notification for more info',
+        result
+      )
     } catch (error) {
       return helper.response(response, 400, 'Bad Request!', error)
     }

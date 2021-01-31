@@ -18,7 +18,7 @@ module.exports = {
   getNotifByUserIdModel: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM notif WHERE receiverId = ? ',
+        'SELECT * FROM notif WHERE receiverId = ? ORDER BY createdAt DESC ',
         id,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
