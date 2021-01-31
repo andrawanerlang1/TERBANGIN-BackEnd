@@ -1,13 +1,11 @@
 const router = require('express').Router()
 const {
   postNotif,
-  getAllNotif,
   getNotifByUserId,
   deleteNotifByUserId
-} = require('../controller/booking')
+} = require('../controller/notif')
 
-router.get('/all', getAllNotif)
-router.get('/get/:id', getNotifByUserId)
+router.get('/:id', getNotifByUserId)
 router.post('/post', postNotif)
 router.delete('/:id', deleteNotifByUserId)
 
