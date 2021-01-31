@@ -71,11 +71,14 @@ module.exports = {
       )
     })
   },
-  getAllFlightModel: () => {
+  getAllFlightModel: (limit, offset) => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM flight', (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))
-      })
+      connection.query(
+        `SELECT * FROM flight LIMIT ${limit} OFFSET ${offset}`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
     })
   },
   getFlightByIdModel: (id) => {
@@ -89,7 +92,8 @@ module.exports = {
       )
     })
   },
-  dataCountModel: (fromCity,
+  dataCountModel: (
+    fromCity,
     toCity,
     flightDate,
     clas,
@@ -101,11 +105,25 @@ module.exports = {
     arrived,
     airline,
     price,
-    sorting) => {
+    sorting
+  ) => {
     return new Promise((resolve, reject) => {
-      connection.query(`SELECT COUNT(*) AS total FROM flight WHERE fromCity = '${fromCity}' AND toCity = '${toCity}' AND flightDate = '${flightDate}' AND clas = '${clas}'${transit}${facLuggage}${facfood}${facwifi}${departure}${arrived}${airline}${price} ORDER BY ${sorting}`, (error, result) => {
-        !error ? resolve(result) : reject(new Error(error))
-      })
+      connection.query(
+        `SELECT COUNT(*) AS total FROM flight WHERE fromCity = '${fromCity}' AND toCity = '${toCity}' AND flightDate = '${flightDate}' AND clas = '${clas}'${transit}${facLuggage}${facfood}${facwifi}${departure}${arrived}${airline}${price} ORDER BY ${sorting}`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  allDataCountModel: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT COUNT(*) AS totalData FROM flight',
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
     })
   }
 }
