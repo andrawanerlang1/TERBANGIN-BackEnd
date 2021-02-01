@@ -37,7 +37,11 @@ module.exports = {
           request.token = result
           next()
         } else {
-          return helper.response(response, 202, 'Sorry admin Can do that ')
+          return helper.response(
+            response,
+            202,
+            'Not Allowed ! Page accessible by admin only'
+          )
         }
       }
     })

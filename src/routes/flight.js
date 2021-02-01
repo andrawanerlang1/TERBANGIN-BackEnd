@@ -7,11 +7,12 @@ const {
   getAllFlight,
   getFlightById
 } = require('../controller/flight')
+const { authUser, authrole1 } = require('../middleware/auth')
 
-router.post('/', uploadImage, postFlight)
-router.patch('/', updateCapacity)
-router.get('/', getFlight)
-router.get('/all', getAllFlight)
-router.get('/:id', getFlightById)
+router.post('/', authUser, authrole1, uploadImage, postFlight)
+router.patch('/', authUser, updateCapacity)
+router.get('/', authUser, getFlight)
+router.get('/all', authUser, getAllFlight)
+router.get('/:id', authUser, getFlightById)
 
 module.exports = router
