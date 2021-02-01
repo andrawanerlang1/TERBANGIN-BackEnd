@@ -10,7 +10,7 @@ const {
   deleteImg,
   settings
 } = require('../controller/user')
-// const {authUser ,authrole1} = require('../middleware/auth')
+const { authUser } = require('../middleware/auth')
 const uploadImage = require('../middleware/multerUser')
 // ==> Auth  <== //
 router.post('/login', login)
@@ -19,8 +19,8 @@ router.post('/forgot', forgotPassword)
 router.post('/reset', resetPassword)
 router.patch('/changePassword', changePassword)
 // ==> User <==
-router.get('/:id', getuserbyId)
-router.patch('/settings/:id', settings)
-router.patch('/img/:id', uploadImage, patchimg)
-router.delete('deleteImg/:id', deleteImg)
+router.get('/:id', authUser, getuserbyId)
+router.patch('/settings/:id', authUser, settings)
+router.patch('/img/:id', authUser, uploadImage, patchimg)
+router.delete('deleteImg/:id', authUser, deleteImg)
 module.exports = router

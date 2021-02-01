@@ -8,12 +8,13 @@ const {
   getMessage,
   getAdmin
 } = require('../controller/chat')
+const { authUser } = require('../middleware/auth')
 
-router.get('/room/:id', getRoom)
-router.get('/rooms', getRoom2User)
-router.get('/admin', getAdmin)
-router.post('/room', createRoom)
-router.post('/message', sendMessage)
-router.get('/message/:id', getMessage)
+router.get('/room/:id', authUser, getRoom)
+router.get('/rooms', authUser, getRoom2User)
+router.get('/admin', authUser, getAdmin)
+router.post('/room', authUser, createRoom)
+router.post('/message', authUser, sendMessage)
+router.get('/message/:id', authUser, getMessage)
 
 module.exports = router
