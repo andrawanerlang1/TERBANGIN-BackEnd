@@ -1,16 +1,19 @@
 const router = require('express').Router()
 const {
+  postMidtransNotif,
   postBooking,
   patchStatusBooking,
   getDataBookingByUserId,
   getBookingDetail,
   getAllDataBooking
 } = require('../controller/booking')
+const { authUser, authrole1 } = require('../middleware/auth')
 
-router.get('/detail/:id', getBookingDetail) // http://localhost:3000/detail/:id
-router.get('/:id', getDataBookingByUserId) // http://localhost:3000/booking/:id
-router.get('/', getAllDataBooking)
-router.post('/book', postBooking) // http://localhost:3000/booking/book
-router.patch('/book/', patchStatusBooking) // http://localhost:3000/booking/book/?userId=1&id=1
+router.get('/detail/:id', authUser, getBookingDetail)
+router.get('/:id', authUser, getDataBookingByUserId)
+router.get('/', authUser, authrole1, getAllDataBooking)
+router.post('/book', authUser, postBooking)
+router.post('/midtrans-notif', authUser, postMidtransNotif)
+router.patch('/book/', authUser, patchStatusBooking)
 
 module.exports = router

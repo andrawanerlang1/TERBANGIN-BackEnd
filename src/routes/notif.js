@@ -4,9 +4,10 @@ const {
   getNotifByUserId,
   deleteNotifByUserId
 } = require('../controller/notif')
+const { authUser } = require('../middleware/auth')
 
-router.get('/:id', getNotifByUserId)
-router.post('/post', postNotif)
-router.delete('/:id', deleteNotifByUserId)
+router.get('/:id', authUser, getNotifByUserId)
+router.post('/post', authUser, postNotif)
+router.delete('/:id', authUser, deleteNotifByUserId)
 
 module.exports = router

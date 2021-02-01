@@ -1,4 +1,5 @@
 const {
+  createPayment,
   postBooking,
   postDataPassenger,
   getDataByBookingId,
@@ -8,8 +9,9 @@ const {
   getDataBookingDetail,
   getAllDataBookingModel
 } = require('../model/booking')
-
 const helper = require('../helper/response')
+const midtransClient = require('midtrans-client')
+
 module.exports = {
   postBooking: async (req, res) => {
     try {
@@ -61,11 +63,16 @@ module.exports = {
           }
         }
       }
+      const bookingId = result.bookingId
+      const totalPayment = result.totalPayment
+      const booking = await createPayment(bookingId, totalPayment)
+      const url = {}
+      url.midtransUrl = booking
       return helper.response(
         res,
         200,
         'Success booking! Enjoy your trip!',
-        result
+        [result, url]
       )
     } catch (error) {
       return helper.response(res, 400, 'Bad Request!', error)
@@ -130,20 +137,67 @@ module.exports = {
             updatedAt: new Date()
           }
           const resultPatch = await patchStatusBooking(setData, id)
+          console.log(resultPatch)
           return helper.response(res, 200, 'Booking Succeeded!', resultPatch)
         } else {
           return helper.response(
             res,
             404,
-            `There is no data booking id: ${id} for user id: ${userId}!`
+          `There is no data booking id: ${id} for user id: ${userId}!`
           )
         }
       } else {
         return helper.response(res, 404, "You haven't booked any ticket!")
       }
     } catch (error) {
-      console.log(error)
       return helper.response(res, 400, 'Bad Request!', error)
+    }
+  },
+  postMidtransNotif: async (request, response) => {
+    try {
+      const snap = new midtransClient.Snap({
+        isProduction: false,
+        clientKey: 'SB-Mid-client-3ReA74BDVu_-3aqu',
+        serverKey: 'SB-Mid-server-FOMwVHyJWnxkEkuLKkW9lIMi'
+      })
+      snap.transaction.notification(request.body).then(async (statusResponse) => {
+        const orderId = statusResponse.order_id
+        const transactionStatus = statusResponse.transaction_status
+        const fraudStatus = statusResponse.fraud_status
+        console.log(
+          `Transaction notification received. Order ID: ${orderId}. Transaction status: ${transactionStatus}. Fraud status: ${fraudStatus}`
+        )
+        if (transactionStatus === 'capture') {
+          if (fraudStatus === 'challenge') {
+            return helper.response(response, 400, 'Failed!')
+          } else if (fraudStatus === 'accept') {
+            const setData = {
+              paymentStatus: 1,
+              updatedAt: new Date()
+            }
+            const resultPatch = await patchStatusBooking(setData, orderId)
+            return helper.response(response, 200, 'Booking Succeeded!', resultPatch)
+          }
+        } else if (transactionStatus === 'settlement') {
+          const setData = {
+            paymentStatus: 1,
+            updatedAt: new Date()
+          }
+          const resultPatch = await patchStatusBooking(setData, orderId)
+          return helper.response(response, 200, 'Booking Succeeded!', resultPatch)
+        } else if (transactionStatus === 'deny') {
+          return helper.response(response, 400, 'Denied!')
+        } else if (
+          transactionStatus === 'cancel' ||
+          transactionStatus === 'expire'
+        ) {
+          return helper.response(response, 400, 'Failed!')
+        } else if (transactionStatus === 'pending') {
+          return helper.response(response, 400, 'Pending!')
+        }
+      })
+    } catch (error) {
+      return helper.response(response, 400, 'Bad Request!', error)
     }
   }
 }
