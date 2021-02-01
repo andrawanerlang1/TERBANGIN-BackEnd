@@ -152,10 +152,16 @@ module.exports = {
           ? ''
           : transitDirect === '' && transit1 === ''
           ? ` AND (${transit2x})`
+          : transitDirect === '' && transit2 === ''
+          ? ` AND (${transit1x})`
           : transit1 === '' && transit2 === ''
           ? `AND (${transitDir})`
           : transitDirect === ''
           ? ` AND (${transit1x} OR${transit2x})`
+          : transit1 === ''
+          ? ` AND (${transitDir} OR${transit2x})`
+          : transit2 === ''
+          ? ` AND (${transitDir} OR${transit1x})`
           : ` AND (${transitDir} OR${transit1x} OR${transit2x})`
 
       // console.log(transit)
