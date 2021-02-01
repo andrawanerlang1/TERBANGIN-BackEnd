@@ -41,13 +41,13 @@ timezone=UTC //Database Timezone
 
 ## License Contributors Team Terbang.in
 
-©[Andrawan Erlang](https://github.com/andrawanerlang1) <br />
-©[M. Ilham H.](https://github.com/IlhamHafsyah) <br />
-©[Rizqon Maulana](https://github.com/rizqonmaulana) <br />
-©[Hasbi Alwi](https://github.com/hasbiak) <br />
-©[Firman Azhar](https://github.com/FirmanAzharR) <br />
-©[Milla Aprilia](https://github.com/millaaprillya) <br />
-©[Chandra Oktaviani](https://github.com/chnd-ktvn)
+© [Andrawan Erlang](https://github.com/andrawanerlang1) <br />
+© [M. Ilham H.](https://github.com/IlhamHafsyah) <br />
+© [Rizqon Maulana](https://github.com/rizqonmaulana) <br />
+© [Hasbi Alwi](https://github.com/hasbiak) <br />
+© [Firman Azhar](https://github.com/FirmanAzharR) <br />
+© [Milla Aprilia](https://github.com/millaaprillya) <br />
+© [Chandra Oktaviani](https://github.com/chnd-ktvn)
 
 ## Team Terbang.in
 
