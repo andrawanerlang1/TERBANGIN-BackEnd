@@ -144,6 +144,9 @@ module.exports = {
         limit
       } = req.query
 
+      fromCity = fromCity !== '' ? ` fromCity = ${fromCity}` : ''
+      toCity = toCity !== '' ? ` AND toCity = ${toCity}` : ''
+      flightDate = flightDate !== '' ? ` AND flightDate = ${flightDate}` : ''
       const transitDir = transitDirect !== 0 ? " transitType = '0'" : ''
       const transit1x = transit1 !== 0 ? " transitType = '1'" : ''
       const transit2x = transit2 !== 0 ? " transitType = '2'" : ''
@@ -165,7 +168,6 @@ module.exports = {
           : ` AND (${transitDir} OR${transit1x} OR${transit2x})`
 
       // console.log(transit)
-      console.log(clas)
 
       const facLuggage = luggage !== '' ? ` AND luggage = ${luggage}` : ''
       const facfood = food !== '' ? ` AND food = ${food}` : ''
@@ -187,6 +189,21 @@ module.exports = {
 
       page = parseInt(page)
       limit = parseInt(limit)
+
+      if (fromCity === '' && toCity === '' && flightDate === '') {
+        clas += ''
+      } else {
+        clas += ' AND '
+      }
+      clas +=
+        clas === '1'
+          ? '(clas = 1 OR clas = 4 OR clas = 5 OR clas = 7)'
+          : clas === '2'
+          ? '(clas = 2 OR clas = 4 OR clas = 6 OR clas = 7)'
+          : clas === '3'
+          ? '(clas = 3 OR clas = 5 OR clas = 6 OR clas = 7)'
+          : '(clas = 1 OR clas = 2 OR clas = 3 OR clas = 4 OR clas = 5 OR clas = 6 OR clas = 7)'
+      console.log(clas)
 
       const total = await dataCountModel(
         fromCity,
@@ -224,88 +241,80 @@ module.exports = {
           previousLink && `http://localhost:3000/flight?${previousLink}`
       }
 
-      if (
-        fromCity === '' &&
-        toCity === '' &&
-        flightDate === '' &&
-        clas === ''
-      ) {
-        const allData = await allDataCountModel()
-        const totalAllData = allData[0].totalData
-        const allDataTotalPage = Math.ceil(totalAllData / limit)
-        const offsetAllData = page * limit - limit
-        console.log(req.query)
-        const previousLink =
-          page > 1
-            ? qs.stringify({ ...req.query, ...{ page: page - 1 } })
-            : null
-        const nextLink =
-          page < allDataTotalPage
-            ? qs.stringify({ ...req.query, ...{ page: page + 1 } })
-            : null
-        const allDataPage = {
-          page,
-          limit,
-          totalPage: allDataTotalPage,
-          totalData: totalAllData,
-          nextLink: nextLink && `http://localhost:3000/flight?${nextLink}`,
-          previousLink:
-            previousLink && `http://localhost:3000/flight?${previousLink}`
-        }
-        console.log(allDataPage.nextLink)
-        const result = await getAllFlightModel(limit, offsetAllData)
+      // if (
+      //   fromCity === '' &&
+      //   toCity === '' &&
+      //   flightDate === '' &&
+      //   clas === ''
+      // ) {
+      //   const allData = await allDataCountModel()
+      //   const totalAllData = allData[0].totalData
+      //   const allDataTotalPage = Math.ceil(totalAllData / limit)
+      //   const offsetAllData = page * limit - limit
+      //   console.log(req.query)
+      //   const previousLink =
+      //     page > 1
+      //       ? qs.stringify({ ...req.query, ...{ page: page - 1 } })
+      //       : null
+      //   const nextLink =
+      //     page < allDataTotalPage
+      //       ? qs.stringify({ ...req.query, ...{ page: page + 1 } })
+      //       : null
+      //   const allDataPage = {
+      //     page,
+      //     limit,
+      //     totalPage: allDataTotalPage,
+      //     totalData: totalAllData,
+      //     nextLink: nextLink && `http://localhost:3000/flight?${nextLink}`,
+      //     previousLink:
+      //       previousLink && `http://localhost:3000/flight?${previousLink}`
+      //   }
+      //   console.log(allDataPage.nextLink)
+      //   const result = await getAllFlightModel(limit, offsetAllData)
+      //   return helper.response(
+      //     res,
+      //     200,
+      //     'Success get all flight !',
+      //     result,
+      //     allDataPage
+      //   )
+      // } else {
+
+      const result = await getFlightModel(
+        fromCity,
+        toCity,
+        flightDate,
+        clas,
+        transit,
+        facLuggage,
+        facfood,
+        facwifi,
+        departure,
+        arrived,
+        airline,
+        price,
+        sorting,
+        limit,
+        offset
+      )
+      if (result.length > 0) {
         return helper.response(
           res,
           200,
-          'Success get all flight !',
+          'Success get flight !',
           result,
-          allDataPage
+          newPage
         )
       } else {
-        clas =
-          clas === '1'
-            ? '(clas = 1 OR clas = 4 OR clas = 5 OR clas = 7)'
-            : clas === '2'
-            ? '(clas = 2 OR clas = 4 OR clas = 6 OR clas = 7)'
-            : clas === '3'
-            ? '(clas = 3 OR clas = 5 OR clas = 6 OR clas = 7)'
-            : ''
-        const result = await getFlightModel(
-          fromCity,
-          toCity,
-          flightDate,
-          clas,
-          transit,
-          facLuggage,
-          facfood,
-          facwifi,
-          departure,
-          arrived,
-          airline,
-          price,
-          sorting,
-          limit,
-          offset
+        return helper.response(
+          res,
+          400,
+          'There is no flight for that condition !',
+          result
         )
-        if (result.length > 0) {
-          return helper.response(
-            res,
-            200,
-            'Success get flight !',
-            result,
-            newPage
-          )
-        } else {
-          return helper.response(
-            res,
-            400,
-            'There is no flight for that condition !',
-            result
-          )
-        }
       }
+      // }
     } catch (error) {
-      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
