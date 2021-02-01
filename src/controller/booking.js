@@ -5,7 +5,8 @@ const {
   getDataBookingByUserId,
   patchStatusBooking,
   getBookingDetail,
-  getDataBookingDetail
+  getDataBookingDetail,
+  getAllDataBookingModel
 } = require('../model/booking')
 
 const helper = require('../helper/response')
@@ -27,9 +28,7 @@ module.exports = {
             contactNumber
           } = data[0]
 
-          if (contactFullName &&
-            contactEmail &&
-            contactNumber) {
+          if (contactFullName && contactEmail && contactNumber) {
             const setData = {
               userId,
               flightId,
@@ -47,15 +46,9 @@ module.exports = {
             return helper.response(res, 400, 'Please fill out the form first!')
           }
         } else {
-          const {
-            title,
-            fullName,
-            nationality
-          } = data[i]
+          const { title, fullName, nationality } = data[i]
 
-          if (title &&
-            fullName &&
-            nationality) {
+          if (title && fullName && nationality) {
             const setDataPassenger = {
               bookingId: result.bookingId,
               title,
@@ -68,7 +61,12 @@ module.exports = {
           }
         }
       }
-      return helper.response(res, 200, 'Success booking! Enjoy your trip!', result)
+      return helper.response(
+        res,
+        200,
+        'Success booking! Enjoy your trip!',
+        result
+      )
     } catch (error) {
       return helper.response(res, 400, 'Bad Request!', error)
     }
@@ -78,10 +76,23 @@ module.exports = {
       const { id } = req.params
       const result = await getDataBookingByUserId(id)
       if (result.length > 0) {
-        return helper.response(res, 200, `Success get data booking by id user ${id}`, result)
+        return helper.response(
+          res,
+          200,
+          `Success get data booking by id user ${id}`,
+          result
+        )
       } else {
-        return helper.response(res, 404, 'You haven\'t booked any ticket!')
+        return helper.response(res, 404, "You haven't booked any ticket!")
       }
+    } catch (error) {
+      return helper.response(res, 400, 'Bad Request!', error)
+    }
+  },
+  getAllDataBooking: async (req, res) => {
+    try {
+      const result = await getAllDataBookingModel()
+      return helper.response(res, 200, 'Success get all data booking', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request!', error)
     }
@@ -92,7 +103,12 @@ module.exports = {
       const checkBookingId = await getDataBookingDetail(id)
       if (checkBookingId.length > 0) {
         const result = await getBookingDetail(id)
-        return helper.response(res, 200, `Success get detail booking by booking id: ${id}`, result)
+        return helper.response(
+          res,
+          200,
+          `Success get detail booking by booking id: ${id}`,
+          result
+        )
       } else {
         return helper.response(res, 404, `ID ${id} is not found!`)
       }
@@ -116,10 +132,14 @@ module.exports = {
           const resultPatch = await patchStatusBooking(setData, id)
           return helper.response(res, 200, 'Booking Succeeded!', resultPatch)
         } else {
-          return helper.response(res, 404, `There is no data booking id: ${id} for user id: ${userId}!`)
+          return helper.response(
+            res,
+            404,
+            `There is no data booking id: ${id} for user id: ${userId}!`
+          )
         }
       } else {
-        return helper.response(res, 404, 'You haven\'t booked any ticket!')
+        return helper.response(res, 404, "You haven't booked any ticket!")
       }
     } catch (error) {
       console.log(error)
