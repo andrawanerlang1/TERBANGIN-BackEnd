@@ -144,9 +144,9 @@ module.exports = {
         limit
       } = req.query
 
-      fromCity = fromCity !== '' ? ` fromCity = ${fromCity}` : ''
-      toCity = toCity !== '' ? ` AND toCity = ${toCity}` : ''
-      flightDate = flightDate !== '' ? ` AND flightDate = ${flightDate}` : ''
+      fromCity = fromCity !== '' ? ` fromCity = '${fromCity}'` : ''
+      toCity = toCity !== '' ? ` AND toCity = '${toCity}'` : ''
+      flightDate = flightDate !== '' ? ` AND flightDate = '${flightDate}'` : ''
       const transitDir = transitDirect !== 0 ? " transitType = '0'" : ''
       const transit1x = transit1 !== 0 ? " transitType = '1'" : ''
       const transit2x = transit2 !== 0 ? " transitType = '2'" : ''
@@ -196,20 +196,30 @@ module.exports = {
         clas += ' AND '
       }
       clas +=
-        clas === '1'
+        clas === '1' || clas === '1 AND '
           ? '(clas = 1 OR clas = 4 OR clas = 5 OR clas = 7)'
-          : clas === '2'
+          : clas === '2' || clas === '2 AND '
           ? '(clas = 2 OR clas = 4 OR clas = 6 OR clas = 7)'
-          : clas === '3'
+          : clas === '3' || clas === '3 AND '
           ? '(clas = 3 OR clas = 5 OR clas = 6 OR clas = 7)'
-          : '(clas = 1 OR clas = 2 OR clas = 3 OR clas = 4 OR clas = 5 OR clas = 6 OR clas = 7)'
-      console.log(clas)
+          : '1(clas = 1 OR clas = 2 OR clas = 3 OR clas = 4 OR clas = 5 OR clas = 6 OR clas = 7)'
+
+      const clas1 = clas.substring(1)
+
+      // clas === '1'
+      //   ? '(clas = 1 OR clas = 4 OR clas = 5 OR clas = 7)'
+      //   : clas === '2'
+      //   ? '(clas = 2 OR clas = 4 OR clas = 6 OR clas = 7)'
+      //   : clas === '3'
+      //   ? '(clas = 3 OR clas = 5 OR clas = 6 OR clas = 7)'
+      //   : '(clas = 1 OR clas = 2 OR clas = 3 OR clas = 4 OR clas = 5 OR clas = 6 OR clas = 7)'
+      console.log(clas1)
 
       const total = await dataCountModel(
         fromCity,
         toCity,
         flightDate,
-        clas,
+        clas1,
         transit,
         facLuggage,
         facfood,
@@ -284,7 +294,7 @@ module.exports = {
         fromCity,
         toCity,
         flightDate,
-        clas,
+        clas1,
         transit,
         facLuggage,
         facfood,
@@ -315,6 +325,7 @@ module.exports = {
       }
       // }
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
