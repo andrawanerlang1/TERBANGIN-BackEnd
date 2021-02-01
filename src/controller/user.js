@@ -142,9 +142,9 @@ module.exports = {
           from: '"terbangin.com 👻" <terbangin@gmail.com', // sender address
           to: email, // list of receivers
           subject: 'terbangin - Forgot Password', // Subject line
-          html: `<p>To Account   $ email}</p>
+          html: `<p>To Account  </p>
           <p>Hello I am milla personal team from terbangin will help you to change your new password, please activate it on this page</p>
-          <a href=" http://localhost:8080/confirmpassword/${keys}">Click Here To Change Password</a>`
+          <a href=" http://localhost:8080/login?key=${keys}">Click Here To Change Password</a>`
         }
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
@@ -173,11 +173,7 @@ module.exports = {
           'Password must be 8-16 characters long'
         )
       } else if (newPassword !== confirmPassword) {
-        return helper.response(
-          response,
-          400,
-          `Password didn't match ${newPassword}`
-        )
+        return helper.response(response, 400, "Password didn't match")
       } else {
         const getKeys = await getKeysmodel(key)
         console.log(getKeys)
@@ -284,17 +280,21 @@ module.exports = {
           const result = await settings(setData, id)
           return helper.response(response, 201, 'Profile Updated', result)
         } else {
-          fs.unlink(`./uploads/user${cekId[0].profileImage}`, async (error) => {
-            if (error) {
-              throw error
-            } else {
-              const result = await settings(setData, id)
-              return helper.response(response, 201, 'Profile Updated', result)
+          fs.unlink(
+            `./uploads/user/${cekId[0].profileImage}`,
+            async (error) => {
+              if (error) {
+                throw error
+              } else {
+                const result = await settings(setData, id)
+                return helper.response(response, 201, 'Profile Updated', result)
+              }
             }
-          })
+          )
         }
       }
     } catch (error) {
+      console.log(error)
       return helper.response(response, 400, 'Bad Request', error)
     }
   },

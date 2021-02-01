@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 31 Jan 2021 pada 10.02
+-- Waktu pembuatan: 31 Jan 2021 pada 14.03
 -- Versi server: 10.4.14-MariaDB
 -- Versi PHP: 7.2.34
 
@@ -34,13 +34,21 @@ CREATE TABLE `booking` (
   `flightId` int(5) NOT NULL,
   `paymentStatus` int(1) NOT NULL,
   `totalPayment` int(30) NOT NULL,
-  `code` varchar(10) NOT NULL,
+  `code` varchar(50) NOT NULL,
   `contactFullname` varchar(50) NOT NULL,
   `contactEmail` varchar(50) NOT NULL,
   `contactNumber` int(30) NOT NULL,
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `booking`
+--
+
+INSERT INTO `booking` (`bookingId`, `userId`, `totalPassenger`, `flightId`, `paymentStatus`, `totalPayment`, `code`, `contactFullname`, `contactEmail`, `contactNumber`, `createdAt`, `updatedAt`) VALUES
+(1, 2, 3, 2, 0, 7500000, 'af38cd3205', 'Tanjirou', 'tanjirou@gmail.com', 1234, '2021-01-31 12:43:44', '2021-01-31 19:43:44'),
+(2, 2, 3, 2, 1, 7500000, 'b132306671', 'Tanjirou', 'tanjirou@gmail.com', 1234, '2021-01-31 12:44:23', '2021-01-31 19:44:23');
 
 -- --------------------------------------------------------
 
@@ -56,6 +64,32 @@ CREATE TABLE `chat` (
   `receiver` int(5) NOT NULL,
   `createdAt` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `chat`
+--
+
+INSERT INTO `chat` (`chatId`, `roomIdUniq`, `message`, `sender`, `receiver`, `createdAt`) VALUES
+(1, 818935, 'halo admin', 2, 1, '2021-01-31 18:52:02'),
+(2, 818935, 'apa kabar', 2, 1, '2021-01-31 18:52:05'),
+(3, 818935, 'tes 1 2 3', 2, 1, '2021-01-31 18:52:19'),
+(4, 818935, 'tes', 2, 1, '2021-01-31 18:59:57'),
+(5, 818935, 'tes123', 2, 1, '2021-01-31 19:04:08'),
+(6, 818935, '123', 2, 1, '2021-01-31 19:04:16'),
+(7, 818935, 'aaaa', 2, 1, '2021-01-31 19:04:28'),
+(8, 818935, 'aa', 2, 1, '2021-01-31 19:04:42'),
+(9, 818935, 'asd', 2, 1, '2021-01-31 19:06:31'),
+(10, 818935, 'asd', 2, 1, '2021-01-31 19:10:02'),
+(11, 818935, '12312', 2, 1, '2021-01-31 19:10:12'),
+(12, 1, 'qwqdqw', 123, 321, '2021-01-31 19:15:18'),
+(13, 1, 'qwqdqw', 123, 321, '2021-01-31 19:15:22'),
+(14, 818935, 'asdasd', 2, 1, '2021-01-31 19:18:25'),
+(15, 818935, 'asd', 2, 1, '2021-01-31 19:24:11'),
+(16, 818935, 'awdawd', 2, 1, '2021-01-31 19:25:11'),
+(17, 818935, 'dq22dwa', 2, 1, '2021-01-31 19:25:16'),
+(18, 818935, '1', 2, 1, '2021-01-31 19:27:19'),
+(19, 818935, '2', 2, 1, '2021-01-31 19:27:23'),
+(20, 818935, '3', 2, 1, '2021-01-31 19:27:23');
 
 -- --------------------------------------------------------
 
@@ -93,7 +127,7 @@ CREATE TABLE `flight` (
 
 INSERT INTO `flight` (`flightId`, `mascapai`, `mascapaiImage`, `departureTime`, `arrivedTime`, `flightDate`, `price`, `food`, `wifi`, `luggage`, `capacity`, `clas`, `fromCity`, `fromCountry`, `toCity`, `toCountry`, `tripType`, `terminal`, `transitType`, `gate`, `flightCode`) VALUES
 (1, 'Air Asia', '2021-01-28T15-49-35.653Zairasia.png', '15:00:00', '15:45:00', '2021-01-30 00:00:00', 1200000, 1, 1, 0, 90, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 2, '222', ''),
-(2, 'Garuda Indonesia', '2021-01-29T06-07-05.305ZgarudaIndonesia.png', '06:45:00', '07:15:00', '2021-01-30 00:00:00', 600000, 1, 1, 0, 100, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 2, '212', ''),
+(2, 'Garuda Indonesia', '2021-01-29T06-07-05.305ZgarudaIndonesia.png', '06:45:00', '07:15:00', '2021-01-30 00:00:00', 600000, 1, 1, 0, 100, 1, 'Surabaya', 'IDN', 'Medan', 'IDN', '1', 'B12', 2, '212', ''),
 (3, 'Garuda Indonesia', '2021-01-29T06-08-43.747ZgarudaIndonesia.png', '07:50:00', '08:15:00', '2021-01-30 00:00:00', 550000, 1, 1, 1, 100, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 1, '212', ''),
 (4, 'Garuda Indonesia', '2021-01-29T06-09-22.352ZgarudaIndonesia.png', '07:50:00', '08:15:00', '2021-01-30 00:00:00', 550000, 1, 1, 1, 100, 2, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 0, '221', ''),
 (5, 'Garuda Indonesia', '2021-01-29T06-10-23.324ZgarudaIndonesia.png', '19:50:00', '20:15:00', '2021-01-30 00:00:00', 750000, 1, 1, 1, 100, 2, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 0, '221', ''),
@@ -105,7 +139,7 @@ INSERT INTO `flight` (`flightId`, `mascapai`, `mascapaiImage`, `departureTime`, 
 (11, 'Air Asia', '2021-01-29T06-17-19.663Zairasia.png', '20:00:00', '20:35:00', '2021-01-30 00:00:00', 600000, 1, 0, 1, 100, 1, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A16', 0, '234', ''),
 (12, 'Air Asia', '2021-01-29T15-07-53.496Zairasia.png', '00:00:02', '00:00:02', '2021-01-31 00:00:00', 1200000, 1, 1, 1, 100, 2, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 2, '', ''),
 (13, 'Lion Air', '2021-01-29T15-09-40.410Zairasia.png', '00:00:02', '00:00:02', '2021-01-31 00:00:00', 1200000, 1, 1, 1, 100, 2, 'Surabaya', 'Indonesia', 'Medan', 'Indonesia', '1', 'A2', 0, '', ''),
-(14, 'Lion Air', '2021-01-30T22-15-55.637Zairasia.png', '00:00:02', '00:00:02', '2021-02-01 00:00:00', 1000000, 1, 1, 1, 100, 2, 'Medan', 'Indonesia', 'Surabaya', 'Indonesia', '1', 'A2', 0, '', 'AB-2066');
+(14, 'Lion Air', '2021-01-30T22-15-55.637Zairasia.png', '00:00:02', '00:00:02', '2021-02-18 08:25:17', 1000000, 1, 1, 1, 100, 2, 'Medan', 'Indonesia', 'Surabaya', 'Indonesia', '1', 'A2', 0, '', 'AB-2066');
 
 -- --------------------------------------------------------
 
@@ -118,7 +152,7 @@ CREATE TABLE `notif` (
   `notifTitle` varchar(255) NOT NULL,
   `notifMessage` varchar(300) NOT NULL,
   `receiverId` int(11) NOT NULL,
-  `createdAt` datetime NOT NULL
+  `createdAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -135,6 +169,16 @@ CREATE TABLE `passenger` (
   `nationality` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data untuk tabel `passenger`
+--
+
+INSERT INTO `passenger` (`passengerId`, `bookingId`, `title`, `fullName`, `nationality`) VALUES
+(1, 1, 'ms', 'Nezuko', 'Indonesia'),
+(2, 1, 'mr', 'Zenitsu', 'Indonesia'),
+(3, 2, 'ms', 'Nezuko', 'Indonesia'),
+(4, 2, 'mr', 'Zenitsu', 'Indonesia');
+
 -- --------------------------------------------------------
 
 --
@@ -149,6 +193,14 @@ CREATE TABLE `roomchat` (
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `roomchat`
+--
+
+INSERT INTO `roomchat` (`roomId`, `roomIdUniq`, `sender`, `receiver`, `createdAt`, `updatedAt`) VALUES
+(1, 818935, 2, 1, '2021-01-31 18:51:57', '2021-01-31 18:51:57'),
+(2, 818935, 1, 2, '2021-01-31 18:51:57', '2021-01-31 18:51:57');
 
 -- --------------------------------------------------------
 
@@ -177,7 +229,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`userId`, `email`, `password`, `fullName`, `profileImage`, `phoneNumber`, `city`, `nationality`, `postCode`, `role`, `status`, `createdAt`, `updatedAt`) VALUES
-(1, 'andr7na@gmail.com', '$2b$10$GecrBC7c8oV6jJKkUSnjlepfU1bpimijqAFMrvkiisctZgPaN8eRi', 'andrawan', '', 85458345, '', '', 0, 0, 0, '2021-01-29 09:12:46', '2021-01-29 09:12:46');
+(1, 'andr7na@gmail.com', '$2b$10$GecrBC7c8oV6jJKkUSnjlepfU1bpimijqAFMrvkiisctZgPaN8eRi', 'andrawan', '', 85458345, '', '', 0, 1, 0, '2021-01-29 09:12:46', '2021-01-29 09:12:46'),
+(2, 'asd@asd', '$2b$10$Ba2pjQvsb9al0pl0UcOHxOiWk86iUqKBSM/nv3iq2Z2FelNNxBBNa', 'asd', '', 123, 'bekasi', 'jalan bumi lestari', 1745, 0, 0, '2021-01-31 18:00:54', '2021-01-31 12:42:01'),
+(3, 'admin@admin', '$2b$10$FeM8aiKF7Wboszh10wo4RukknQ1ZF1226OnsVm8B60HF8cKrSYs/2', 'Chandrawan', '', 0, '', '', 0, 0, 0, '2021-01-31 18:51:26', '2021-01-31 18:51:26');
 
 --
 -- Indexes for dumped tables
@@ -233,13 +287,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT untuk tabel `booking`
 --
 ALTER TABLE `booking`
-  MODIFY `bookingId` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `bookingId` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `chat`
 --
 ALTER TABLE `chat`
-  MODIFY `chatId` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `chatId` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT untuk tabel `flight`
@@ -251,25 +305,25 @@ ALTER TABLE `flight`
 -- AUTO_INCREMENT untuk tabel `notif`
 --
 ALTER TABLE `notif`
-  MODIFY `notifId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `notifId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT untuk tabel `passenger`
 --
 ALTER TABLE `passenger`
-  MODIFY `passengerId` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `passengerId` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `roomchat`
 --
 ALTER TABLE `roomchat`
-  MODIFY `roomId` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `roomId` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `userId` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `userId` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

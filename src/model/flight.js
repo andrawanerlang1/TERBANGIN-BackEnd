@@ -64,8 +64,9 @@ module.exports = {
   ) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM flight WHERE fromCity = '${fromCity}' AND toCity = '${toCity}' AND flightDate = '${flightDate}' AND clas = '${clas}'${transit}${facLuggage}${facfood}${facwifi}${departure}${arrived}${airline}${price} ORDER BY ${sorting} LIMIT ${limit} OFFSET ${offset}`,
+        `SELECT * FROM flight WHERE ${fromCity}${toCity}${flightDate}${clas}${transit}${facLuggage}${facfood}${facwifi}${departure}${arrived}${airline}${price} ORDER BY ${sorting} LIMIT ${limit} OFFSET ${offset}`,
         (error, result) => {
+          console.log(error)
           !error ? resolve(result) : reject(new Error(error))
         }
       )
@@ -109,7 +110,7 @@ module.exports = {
   ) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(*) AS total FROM flight WHERE fromCity = '${fromCity}' AND toCity = '${toCity}' AND flightDate = '${flightDate}' AND clas = '${clas}'${transit}${facLuggage}${facfood}${facwifi}${departure}${arrived}${airline}${price} ORDER BY ${sorting}`,
+        `SELECT COUNT(*) AS total FROM flight WHERE ${fromCity}${toCity}${flightDate}${clas}${transit}${facLuggage}${facfood}${facwifi}${departure}${arrived}${airline}${price} ORDER BY ${sorting}`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
