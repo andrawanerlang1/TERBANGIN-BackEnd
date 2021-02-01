@@ -280,17 +280,21 @@ module.exports = {
           const result = await settings(setData, id)
           return helper.response(response, 201, 'Profile Updated', result)
         } else {
-          fs.unlink(`./uploads/user${cekId[0].profileImage}`, async (error) => {
-            if (error) {
-              throw error
-            } else {
-              const result = await settings(setData, id)
-              return helper.response(response, 201, 'Profile Updated', result)
+          fs.unlink(
+            `./uploads/user/${cekId[0].profileImage}`,
+            async (error) => {
+              if (error) {
+                throw error
+              } else {
+                const result = await settings(setData, id)
+                return helper.response(response, 201, 'Profile Updated', result)
+              }
             }
-          })
+          )
         }
       }
     } catch (error) {
+      console.log(error)
       return helper.response(response, 400, 'Bad Request', error)
     }
   },
