@@ -97,7 +97,7 @@ module.exports = {
   getDataBookingByUserId: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT booking.bookingId, booking.userId, booking.flightId, booking.totalPassenger, booking.totalPayment, booking.paymentStatus, booking.contactFullName, booking.contactEmail, booking.contactNumber, booking.code, mascapai, fromCountry, toCountry,flightDate, departureTime, booking.createdAt, booking.updatedAt FROM booking JOIN flight ON booking.flightId=flight.flightId WHERE userId=${id} ORDER BY booking.createdAt DESC `,
+        `SELECT booking.bookingId, booking.userId, booking.flightId, booking.totalPassenger, booking.totalPayment, booking.paymentStatus, booking.contactFullName, booking.contactEmail, booking.contactNumber, booking.code, mascapai, fromCountry, fromCity, toCountry, toCity, flight.code AS flightCode, flightDate, departureTime, booking.createdAt, booking.updatedAt FROM booking JOIN flight ON booking.flightId=flight.flightId WHERE userId=${id} ORDER BY booking.createdAt DESC `,
         (error, result) => {
           if (!error) {
             resolve(result)
