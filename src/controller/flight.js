@@ -246,8 +246,8 @@ module.exports = {
         const allDataPage = {
           page,
           limit,
-          allDataTotalPage,
-          totalAllData,
+          totalPage: allDataTotalPage,
+          totalData: totalAllData,
           nextLink: nextLink && `http://localhost:3000/flight?${nextLink}`,
           previousLink:
             previousLink && `http://localhost:3000/flight?${previousLink}`
