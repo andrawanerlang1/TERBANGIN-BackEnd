@@ -1,6 +1,34 @@
 const connection = require('../config/mysql')
+const midtransClient = require('midtrans-client')
 
 module.exports = {
+  createPayment: (bookingId, totalPayment) => {
+    return new Promise((resolve, reject) => {
+      const snap = new midtransClient.Snap({
+        isProduction: false,
+        clientKey: 'SB-Mid-client-3ReA74BDVu_-3aqu',
+        serverKey: 'SB-Mid-server-FOMwVHyJWnxkEkuLKkW9lIMi'
+      })
+      const parameter = {
+        transaction_details: {
+          order_id: bookingId,
+          gross_amount: totalPayment
+        },
+        credit_card: {
+          secure: true
+        }
+      }
+      snap.createTransaction(parameter).then((transaction) => {
+        // url deploy
+        const redirectUrl = transaction.redirect_url
+        resolve(redirectUrl)
+      })
+        .catch((error) => {
+          console.log(error)
+          reject(error)
+        })
+    })
+  },
   postBooking: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query('INSERT INTO booking SET ?', setData, (err, result) => {

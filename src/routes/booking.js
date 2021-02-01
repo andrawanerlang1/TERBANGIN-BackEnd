@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const {
+  postMidtransNotif,
   postBooking,
   patchStatusBooking,
   getDataBookingByUserId,
@@ -7,10 +8,11 @@ const {
   getAllDataBooking
 } = require('../controller/booking')
 
-router.get('/detail/:id', getBookingDetail) // http://localhost:3000/detail/:id
-router.get('/:id', getDataBookingByUserId) // http://localhost:3000/booking/:id
+router.get('/detail/:id', getBookingDetail)
+router.get('/:id', getDataBookingByUserId)
 router.get('/', getAllDataBooking)
-router.post('/book', postBooking) // http://localhost:3000/booking/book
-router.patch('/book/', patchStatusBooking) // http://localhost:3000/booking/book/?userId=1&id=1
+router.post('/book', postBooking)
+router.post('/midtrans-notif', postMidtransNotif)
+router.patch('/book/', patchStatusBooking)
 
 module.exports = router
