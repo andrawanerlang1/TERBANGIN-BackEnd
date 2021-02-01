@@ -5,20 +5,24 @@ module.exports = {
   authUser: (request, response, next) => {
     let token = request.headers.authUser
     console.log(token)
-    token = token.split(' ')[1]
-    jwt.verify(token, 'TERBANGIN', (error, result) => {
-      if (
-        (error && error.name === 'JsonWebTokenError') ||
-        (error && error.name === 'TokenExpiredError')
-      ) {
-        console.log(error)
-        return helper.response(response, 400, error.message)
-      } else {
-        console.log(result)
-        request.token = result
-        next()
-      }
-    })
+    if (token) {
+      token = token.split(' ')[1]
+      jwt.verify(token, 'TERBANGIN', (error, result) => {
+        if (
+          (error && error.name === 'JsonWebTokenError') ||
+          (error && error.name === 'TokenExpiredError')
+        ) {
+          console.log(error)
+          return helper.response(response, 400, error.message)
+        } else {
+          console.log(result)
+          request.token = result
+          next()
+        }
+      })
+    } else {
+      return helper.response(response, 400, 'Please Login First !')
+    }
   },
   authrole1: (request, response, next) => {
     let token = request.headers.authrole1
