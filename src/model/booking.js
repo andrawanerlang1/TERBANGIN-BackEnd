@@ -18,11 +18,13 @@ module.exports = {
           secure: true
         }
       }
-      snap.createTransaction(parameter).then((transaction) => {
-        // url deploy
-        const redirectUrl = transaction.redirect_url
-        resolve(redirectUrl)
-      })
+      snap
+        .createTransaction(parameter)
+        .then((transaction) => {
+          // url deploy
+          const redirectUrl = transaction.redirect_url
+          resolve(redirectUrl)
+        })
         .catch((error) => {
           console.log(error)
           reject(error)
@@ -97,7 +99,7 @@ module.exports = {
   getAllDataBookingModel: () => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT bookingId, booking.code, booking.contactFullname, flight.mascapai,booking.totalPayment, booking.createdAt FROM booking JOIN flight ON booking.flightId = flight.flightId WHERE paymentStatus=0',
+        'SELECT bookingId, booking.code, booking.userId, booking.contactFullname, flight.mascapai,booking.totalPayment, booking.createdAt FROM booking JOIN flight ON booking.flightId = flight.flightId WHERE paymentStatus=0 ORDER BY booking.createdAt DESC',
         (error, result) => {
           if (!error) {
             resolve(result)
