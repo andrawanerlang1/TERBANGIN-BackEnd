@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 04 Feb 2021 pada 14.52
+-- Waktu pembuatan: 04 Feb 2021 pada 17.13
 -- Versi server: 10.4.14-MariaDB
 -- Versi PHP: 7.2.34
 
@@ -92,7 +92,7 @@ INSERT INTO `chat` (`chatId`, `roomIdUniq`, `message`, `sender`, `receiver`, `cr
 CREATE TABLE `flight` (
   `flightId` int(10) NOT NULL,
   `mascapai` varchar(20) NOT NULL,
-  `mascapaiImage` varchar(100) NOT NULL,
+  `mascapaiImage` varchar(100) DEFAULT NULL,
   `departureTime` time NOT NULL,
   `arrivedTime` time NOT NULL,
   `flightDate` datetime NOT NULL DEFAULT current_timestamp(),
@@ -267,16 +267,16 @@ CREATE TABLE `user` (
   `email` varchar(40) NOT NULL,
   `password` varchar(255) NOT NULL,
   `fullName` varchar(50) NOT NULL,
-  `profileImage` varchar(200) NOT NULL,
-  `phoneNumber` int(20) NOT NULL,
-  `city` varchar(25) NOT NULL,
-  `nationality` varchar(25) NOT NULL,
-  `postCode` int(10) NOT NULL,
-  `role` int(1) NOT NULL,
-  `status` int(1) NOT NULL,
+  `profileImage` varchar(200) DEFAULT NULL,
+  `phoneNumber` int(20) DEFAULT NULL,
+  `city` varchar(25) DEFAULT NULL,
+  `nationality` varchar(25) DEFAULT NULL,
+  `postCode` int(10) DEFAULT NULL,
+  `role` int(1) DEFAULT 0,
+  `status` int(1) DEFAULT 0,
   `createdAt` datetime NOT NULL DEFAULT current_timestamp(),
   `updatedAt` datetime NOT NULL DEFAULT current_timestamp(),
-  `userKey` int(20) NOT NULL
+  `userKey` int(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
