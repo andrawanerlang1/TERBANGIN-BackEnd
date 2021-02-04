@@ -205,14 +205,6 @@ module.exports = {
           : '1(clas = 1 OR clas = 2 OR clas = 3 OR clas = 4 OR clas = 5 OR clas = 6 OR clas = 7)'
 
       const clas1 = clas.substring(1)
-
-      // clas === '1'
-      //   ? '(clas = 1 OR clas = 4 OR clas = 5 OR clas = 7)'
-      //   : clas === '2'
-      //   ? '(clas = 2 OR clas = 4 OR clas = 6 OR clas = 7)'
-      //   : clas === '3'
-      //   ? '(clas = 3 OR clas = 5 OR clas = 6 OR clas = 7)'
-      //   : '(clas = 1 OR clas = 2 OR clas = 3 OR clas = 4 OR clas = 5 OR clas = 6 OR clas = 7)'
       console.log(clas1)
 
       const total = await dataCountModel(
@@ -250,46 +242,6 @@ module.exports = {
         previousLink:
           previousLink && `http://localhost:3000/flight?${previousLink}`
       }
-
-      // if (
-      //   fromCity === '' &&
-      //   toCity === '' &&
-      //   flightDate === '' &&
-      //   clas === ''
-      // ) {
-      //   const allData = await allDataCountModel()
-      //   const totalAllData = allData[0].totalData
-      //   const allDataTotalPage = Math.ceil(totalAllData / limit)
-      //   const offsetAllData = page * limit - limit
-      //   console.log(req.query)
-      //   const previousLink =
-      //     page > 1
-      //       ? qs.stringify({ ...req.query, ...{ page: page - 1 } })
-      //       : null
-      //   const nextLink =
-      //     page < allDataTotalPage
-      //       ? qs.stringify({ ...req.query, ...{ page: page + 1 } })
-      //       : null
-      //   const allDataPage = {
-      //     page,
-      //     limit,
-      //     totalPage: allDataTotalPage,
-      //     totalData: totalAllData,
-      //     nextLink: nextLink && `http://localhost:3000/flight?${nextLink}`,
-      //     previousLink:
-      //       previousLink && `http://localhost:3000/flight?${previousLink}`
-      //   }
-      //   console.log(allDataPage.nextLink)
-      //   const result = await getAllFlightModel(limit, offsetAllData)
-      //   return helper.response(
-      //     res,
-      //     200,
-      //     'Success get all flight !',
-      //     result,
-      //     allDataPage
-      //   )
-      // } else {
-
       const result = await getFlightModel(
         fromCity,
         toCity,
@@ -323,7 +275,6 @@ module.exports = {
           result
         )
       }
-      // }
     } catch (error) {
       console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
