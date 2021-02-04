@@ -151,5 +151,37 @@ module.exports = {
         }
       )
     })
+  },
+  checkBookingId: (bookingId) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM booking WHERE bookingId=${bookingId}`,
+        (error, result) => {
+          if (!error) {
+            resolve(result)
+          } else {
+            reject(error)
+          }
+        }
+      )
+    })
+  },
+  patchBoardingStatus: (setStatus, bookingId) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `UPDATE booking SET ? WHERE bookingId=${bookingId}`,
+        setStatus,
+        (error, result) => {
+          if (!error) {
+            const newResult = {
+              ...setStatus
+            }
+            resolve(newResult)
+          } else {
+            reject(new Error(error))
+          }
+        }
+      )
+    })
   }
 }
