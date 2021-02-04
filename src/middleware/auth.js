@@ -4,8 +4,8 @@ const helper = require('../helper/response')
 module.exports = {
   authUser: (request, response, next) => {
     let token = request.headers.authorization
-    console.log(request.headers)
-    console.log(token)
+    // console.log(request.headers)
+    // console.log(token)
     if (token) {
       token = token.split(' ')[1]
       jwt.verify(token, 'TERBANGIN', (error, result) => {
@@ -13,10 +13,10 @@ module.exports = {
           (error && error.name === 'JsonWebTokenError') ||
           (error && error.name === 'TokenExpiredError')
         ) {
-          console.log(error)
+          // console.log(error)
           return helper.response(response, 400, error.message)
         } else {
-          console.log(result)
+          // console.log(result)
           request.token = result
           next()
         }
