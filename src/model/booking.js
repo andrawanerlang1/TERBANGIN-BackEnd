@@ -18,11 +18,13 @@ module.exports = {
           secure: true
         }
       }
-      snap.createTransaction(parameter).then((transaction) => {
-        // url deploy
-        const redirectUrl = transaction.redirect_url
-        resolve(redirectUrl)
-      })
+      snap
+        .createTransaction(parameter)
+        .then((transaction) => {
+          // url deploy
+          const redirectUrl = transaction.redirect_url
+          resolve(redirectUrl)
+        })
         .catch((error) => {
           console.log(error)
           reject(error)
@@ -145,6 +147,38 @@ module.exports = {
             resolve(result)
           } else {
             reject(error)
+          }
+        }
+      )
+    })
+  },
+  checkBookingId: (bookingId) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT * FROM booking WHERE bookingId=${bookingId}`,
+        (error, result) => {
+          if (!error) {
+            resolve(result)
+          } else {
+            reject(error)
+          }
+        }
+      )
+    })
+  },
+  patchBoardingStatus: (setStatus, bookingId) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `UPDATE booking SET ? WHERE bookingId=${bookingId}`,
+        setStatus,
+        (error, result) => {
+          if (!error) {
+            const newResult = {
+              ...setStatus
+            }
+            resolve(newResult)
+          } else {
+            reject(new Error(error))
           }
         }
       )

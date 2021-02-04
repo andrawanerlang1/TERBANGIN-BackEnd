@@ -8,8 +8,7 @@ const {
   getFlightModel,
   getAllFlightModel,
   getFlightByIdModel,
-  dataCountModel,
-  allDataCountModel
+  dataCountModel
 } = require('../model/flight')
 
 module.exports = {
@@ -33,7 +32,7 @@ module.exports = {
         tripType,
         terminal,
         transitType,
-        flightCode
+        code
       } = req.body
       console.log(req.body)
       if (
@@ -71,7 +70,7 @@ module.exports = {
           tripType,
           terminal,
           transitType,
-          flightCode
+          code
         }
         const result = await postFlightModel(setData)
         return helper.response(res, 200, 'Success add new flight', result)

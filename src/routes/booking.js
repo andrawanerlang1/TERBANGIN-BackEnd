@@ -5,7 +5,8 @@ const {
   patchStatusBooking,
   getDataBookingByUserId,
   getBookingDetail,
-  getAllDataBooking
+  getAllDataBooking,
+  patchBoardingStatus
 } = require('../controller/booking')
 const { authUser, authrole1 } = require('../middleware/auth')
 
@@ -15,5 +16,6 @@ router.get('/', authUser, authrole1, getAllDataBooking)
 router.post('/book', authUser, postBooking)
 router.post('/midtrans-notif', authUser, postMidtransNotif)
 router.patch('/book/', authUser, patchStatusBooking)
+router.patch('/boarding-status/:id', authUser, patchBoardingStatus)
 
 module.exports = router

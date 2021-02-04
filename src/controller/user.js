@@ -4,7 +4,6 @@ const {
   dataUser,
   getuserbyId,
   getKeysmodel,
-  getIdmodel,
   settings
 } = require('../model/user')
 const helper = require('../helper/response')
@@ -17,7 +16,7 @@ module.exports = {
   login: async (request, response) => {
     try {
       const { email, password } = request.body
-      console.log(request.body)
+      // console.log(request.body)
 
       if (request.body.email === '') {
         return helper.response(response, 400, 'Insert email Please :)')
@@ -25,13 +24,13 @@ module.exports = {
         return helper.response(response, 400, 'Insert Password Please :)')
       } else {
         const checkDataUser = await login(email)
-        console.log(checkDataUser)
+        // console.log(checkDataUser)
         if (checkDataUser.length > 0) {
           const checkPassword = bcrypt.compareSync(
             password,
             checkDataUser[0].password
           )
-          console.log(checkPassword)
+          // console.log('ini cek pass = ' + checkPassword)
           if (checkPassword) {
             const { userId, fullName, email, role } = checkDataUser[0]
             const paylot = {
