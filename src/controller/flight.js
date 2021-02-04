@@ -237,9 +237,9 @@ module.exports = {
         limit,
         totalPage,
         totalData,
-        nextLink: nextLink && `http://localhost:3000/flight?${nextLink}`,
+        nextLink: nextLink && `${process.env.URL}/flight?${nextLink}`,
         previousLink:
-          previousLink && `http://localhost:3000/flight?${previousLink}`
+          previousLink && `${process.env.URL}/flight?${previousLink}`
       }
       const result = await getFlightModel(
         fromCity,
