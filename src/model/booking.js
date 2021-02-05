@@ -70,6 +70,7 @@ module.exports = {
         `UPDATE booking SET ? WHERE bookingId=${id}`,
         setData,
         (error, result) => {
+          console.log(error)
           if (!error) {
             const newResult = {
               ...setData

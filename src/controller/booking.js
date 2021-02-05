@@ -178,9 +178,10 @@ module.exports = {
                 paymentStatus: 1,
                 updatedAt: new Date()
               }
+              console.log('accept')
               const resultPatch = await patchStatusBooking(setData, orderId)
               console.log(resultPatch)
-              console.log('accept')
+
               return helper.response(
                 response,
                 200,
@@ -193,9 +194,10 @@ module.exports = {
               paymentStatus: 1,
               updatedAt: new Date()
             }
+            console.log('settlement')
             const resultPatch = await patchStatusBooking(setData, orderId)
             console.log(resultPatch)
-            console.log('settlement')
+
             return helper.response(
               response,
               200,
@@ -217,6 +219,7 @@ module.exports = {
           }
         })
     } catch (error) {
+      console.log('error')
       console.log(error)
       console.log(error.response)
       return helper.response(response, 400, 'Bad Request!', error)
