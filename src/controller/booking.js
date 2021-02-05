@@ -217,6 +217,8 @@ module.exports = {
           }
         })
     } catch (error) {
+      console.log(error)
+      console.log(error.response)
       return helper.response(response, 400, 'Bad Request!', error)
     }
   },
