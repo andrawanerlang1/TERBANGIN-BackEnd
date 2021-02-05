@@ -9,7 +9,7 @@ require('dotenv').config()
 
 const app = express()
 app.use(morgan('dev'))
-app.use(express.static('uploads'))
+app.use(express.static('uploads/user'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors())
@@ -78,4 +78,3 @@ io.on('connection', (socket) => {
 server.listen(process.env.port, () => {
   console.log(`Listening on Port ${process.env.port}`)
 })
-
