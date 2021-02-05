@@ -155,14 +155,17 @@ module.exports = {
   },
   postMidtransNotif: async (request, response) => {
     try {
+      console.log('postMidtransNotif')
       const snap = new midtransClient.Snap({
         isProduction: false,
         clientKey: 'SB-Mid-client-3ReA74BDVu_-3aqu',
         serverKey: 'SB-Mid-server-FOMwVHyJWnxkEkuLKkW9lIMi'
       })
+      console.log('config Snap')
       snap.transaction
         .notification(request.body)
         .then(async (statusResponse) => {
+          console.log(statusResponse)
           const orderId = statusResponse.order_id
           const transactionStatus = statusResponse.transaction_status
           const fraudStatus = statusResponse.fraud_status
@@ -172,7 +175,7 @@ module.exports = {
           if (transactionStatus === 'capture') {
             if (fraudStatus === 'challenge') {
               console.log('challenge')
-              return helper.response(response, 400, 'Failed!')
+              // return helper.response(response, 400, 'Failed!')
             } else if (fraudStatus === 'accept') {
               const setData = {
                 paymentStatus: 1,
@@ -182,12 +185,12 @@ module.exports = {
               const resultPatch = await patchStatusBooking(setData, orderId)
               console.log(resultPatch)
 
-              return helper.response(
-                response,
-                200,
-                'Booking Succeeded!',
-                resultPatch
-              )
+              // return helper.response(
+              //   response,
+              //   200,
+              //   'Booking Succeeded!',
+              //   resultPatch
+              // )
             }
           } else if (transactionStatus === 'settlement') {
             const setData = {
@@ -198,31 +201,31 @@ module.exports = {
             const resultPatch = await patchStatusBooking(setData, orderId)
             console.log(resultPatch)
 
-            return helper.response(
-              response,
-              200,
-              'Booking Succeeded!',
-              resultPatch
-            )
+            // return helper.response(
+            //   response,
+            //   200,
+            //   'Booking Succeeded!',
+            //   resultPatch
+            // )
           } else if (transactionStatus === 'deny') {
             console.log('deny')
-            return helper.response(response, 400, 'Denied!')
+            // return helper.response(response, 400, 'Denied!')
           } else if (
             transactionStatus === 'cancel' ||
             transactionStatus === 'expire'
           ) {
             console.log('cancel')
-            return helper.response(response, 400, 'Failed!')
+            // return helper.response(response, 400, 'Failed!')
           } else if (transactionStatus === 'pending') {
             console.log('pending')
-            return helper.response(response, 400, 'Pending!')
+            // return helper.response(response, 400, 'Pending!')
           }
         })
     } catch (error) {
       console.log('error')
       console.log(error)
       console.log(error.response)
-      return helper.response(response, 400, 'Bad Request!', error)
+      // return helper.response(response, 400, 'Bad Request!', error)
     }
   },
   patchBoardingStatus: async (req, res) => {
