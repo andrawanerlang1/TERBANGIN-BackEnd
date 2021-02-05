@@ -20,7 +20,7 @@ app.use((request, response, next) => {
   next()
 })
 
-app.use('/', routerNavigation)
+app.use('/api4', routerNavigation)
 app.get('*', (request, response) => {
   response.status(404).send('Path Not Found')
 })

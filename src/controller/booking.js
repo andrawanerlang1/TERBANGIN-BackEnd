@@ -171,6 +171,7 @@ module.exports = {
           )
           if (transactionStatus === 'capture') {
             if (fraudStatus === 'challenge') {
+              console.log('challenge')
               return helper.response(response, 400, 'Failed!')
             } else if (fraudStatus === 'accept') {
               const setData = {
@@ -178,6 +179,8 @@ module.exports = {
                 updatedAt: new Date()
               }
               const resultPatch = await patchStatusBooking(setData, orderId)
+              console.log(resultPatch)
+              console.log('accept')
               return helper.response(
                 response,
                 200,
@@ -191,6 +194,8 @@ module.exports = {
               updatedAt: new Date()
             }
             const resultPatch = await patchStatusBooking(setData, orderId)
+            console.log(resultPatch)
+            console.log('settlement')
             return helper.response(
               response,
               200,
@@ -198,13 +203,16 @@ module.exports = {
               resultPatch
             )
           } else if (transactionStatus === 'deny') {
+            console.log('deny')
             return helper.response(response, 400, 'Denied!')
           } else if (
             transactionStatus === 'cancel' ||
             transactionStatus === 'expire'
           ) {
+            console.log('cancel')
             return helper.response(response, 400, 'Failed!')
           } else if (transactionStatus === 'pending') {
+            console.log('pending')
             return helper.response(response, 400, 'Pending!')
           }
         })
