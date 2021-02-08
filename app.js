@@ -9,7 +9,10 @@ require('dotenv').config()
 
 const app = express()
 app.use(morgan('dev'))
-app.use('/terbangin/fileUploadsTerbangin/user', express.static('uploads'))
+app.use(
+  '/terbangin/fileUploadsTerbangin/user/2021-02-04T07-12-24.613Zaqw2.PNG',
+  express.static('uploads')
+)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors())
