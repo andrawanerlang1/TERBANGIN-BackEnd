@@ -9,7 +9,7 @@ require('dotenv').config()
 
 const app = express()
 app.use(morgan('dev'))
-app.use(express.static('uploads/user'))
+app.use('/terbangin/fileUploadsTerbangin/user', express.static('uploads'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors())
@@ -20,7 +20,7 @@ app.use((request, response, next) => {
   next()
 })
 
-app.use('/api4', routerNavigation)
+app.use('/terbangin', routerNavigation)
 app.get('*', (request, response) => {
   response.status(404).send('Path Not Found')
 })
@@ -30,7 +30,8 @@ const server = http.createServer(app)
 const io = socket(server, {
   cors: {
     origin: '*'
-  }
+  },
+  path: '/terbangin/socket.io'
 })
 io.on('connection', (socket) => {
   console.log('Socket.io Connect !')
