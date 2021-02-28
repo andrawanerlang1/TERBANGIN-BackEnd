@@ -275,7 +275,11 @@ module.exports = {
       }
       const cekId = await getuserbyId(id)
       if (cekId.length > 0) {
-        if (cekId[0].profileImage === '' || request.file === undefined) {
+        if (
+          cekId[0].profileImage === '' ||
+          request.file === undefined ||
+          cekId[0].profileImage === null
+        ) {
           const result = await settings(setData, id)
           return helper.response(response, 201, 'Profile Updated', result)
         } else {
